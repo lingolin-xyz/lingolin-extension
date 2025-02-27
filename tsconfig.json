@@ -8,6 +8,11 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "noUnusedParameters": false,
+    "noUnusedLocals": false,
+    "allowUnusedLabels": true,
+    "allowUnreachableCode": true,
+    "jsx": "react-jsx"
   }
 }
