@@ -46,6 +46,9 @@ function initSelectionBanner() {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    transform: scale(0); /* Start scaled down */
+    transform-origin: bottom center; /* Animate from bottom */
+    transition: none; /* Disable default transitions */
   `
   modal.id = "selection-modal"
 
@@ -80,25 +83,17 @@ function initSelectionBanner() {
     gap: 5px;
   `
 
-  // Create and add the SVG icon
   fetch(chrome.runtime.getURL("translate-icon.svg"))
     .then((response) => response.text())
     .then((svgText) => {
       const parser = new DOMParser()
       const svgDoc = parser.parseFromString(svgText, "image/svg+xml")
       const svgElement = svgDoc.documentElement
-
-      // Adjust SVG size
       svgElement.setAttribute("height", "20px")
       svgElement.setAttribute("width", "20px")
       svgElement.setAttribute("style", "transform: translateY(-2px)")
-
-      // Set SVG color to match button text
       svgElement.style.color = "yellow"
-
       translateButton.appendChild(svgElement)
-
-      // Add text after the icon
       const textSpan = document.createElement("span")
       textSpan.textContent = "Translate"
       textSpan.style.fontSize = "14px"
@@ -106,13 +101,12 @@ function initSelectionBanner() {
     })
     .catch((error) => {
       console.error("Error loading SVG:", error)
-      translateButton.textContent = "Translate" // Fallback to text-only
+      translateButton.textContent = "Translate"
     })
 
   translateButton.addEventListener("click", () => {
     const selectedText = window.getSelection()?.toString().trim()
     if (selectedText) {
-      // TODO: Implement translation functionality
       console.log("Translate:", selectedText)
     }
   })
@@ -132,25 +126,17 @@ function initSelectionBanner() {
     gap: 5px;
   `
 
-  // Create and add the SVG icon
   fetch(chrome.runtime.getURL("copy-icon.svg"))
     .then((response) => response.text())
     .then((svgText) => {
       const parser = new DOMParser()
       const svgDoc = parser.parseFromString(svgText, "image/svg+xml")
       const svgElement = svgDoc.documentElement
-
-      // Adjust SVG size
       svgElement.setAttribute("height", "20px")
       svgElement.setAttribute("width", "20px")
       svgElement.setAttribute("style", "transform: translateY(-2px)")
-
-      // Set SVG color to match button text
       svgElement.style.color = "yellow"
-
       copyButton.appendChild(svgElement)
-
-      // Add text after the icon
       const textSpan = document.createElement("span")
       textSpan.textContent = "Copy to clipboard"
       textSpan.style.fontSize = "14px"
@@ -158,7 +144,7 @@ function initSelectionBanner() {
     })
     .catch((error) => {
       console.error("Error loading SVG:", error)
-      copyButton.textContent = "Copy to clipboard" // Fallback to text-only
+      copyButton.textContent = "Copy to clipboard"
     })
 
   copyButton.addEventListener("click", () => {
@@ -167,7 +153,6 @@ function initSelectionBanner() {
       navigator.clipboard
         .writeText(selectedText)
         .then(() => {
-          // Optional: Show feedback that text was copied
           const originalText = copyButton.querySelector("span").textContent
           copyButton.querySelector("span").textContent = "Copied!"
           setTimeout(() => {
@@ -190,22 +175,84 @@ function initSelectionBanner() {
   wrapper.appendChild(modal)
   document.body.appendChild(wrapper)
 
+  // Spring Animation Function
+  function springAnimation({
+    from,
+    to,
+    stiffness = 0.1,
+    damping = 0.85,
+    onUpdate,
+    onComplete,
+  }) {
+    let current = from
+    let velocity = 0
+
+    function animate() {
+      const force = (to - current) * stiffness
+      velocity = (velocity + force) * damping
+      current += velocity
+
+      onUpdate(current)
+
+      if (Math.abs(to - current) < 0.01 && Math.abs(velocity) < 0.01) {
+        onUpdate(to)
+        if (onComplete) onComplete()
+      } else {
+        requestAnimationFrame(animate)
+      }
+    }
+
+    animate()
+  }
+
   // Listen for text selection changes
+  let lastSelectedText = ""
+
   document.addEventListener("selectionchange", () => {
     const selectedText = window.getSelection()?.toString().trim()
 
-    if (selectedText) {
-      // Show modal with selected text
-      wrapper.style.display = "flex"
+    // Only proceed if the selection has actually changed
+    if (selectedText === lastSelectedText) {
+      return
+    }
 
-      // Truncate text if too long
+    lastSelectedText = selectedText
+
+    if (selectedText) {
+      // Show wrapper and animate modal in
+      wrapper.style.display = "flex"
       textContainer.textContent =
         selectedText.length > MAX_TEXT_LENGTH
           ? selectedText.slice(0, MAX_TEXT_LENGTH) + "..."
           : selectedText
+
+      springAnimation({
+        from: 0, // Start from scale 0
+        to: 1, // End at scale 1
+        stiffness: 0.1,
+        damping: 0.85,
+        onUpdate: (scale) => {
+          modal.style.transform = `scale(${scale})`
+        },
+        onComplete: () => {
+          console.log("Modal animation in completed")
+        },
+      })
     } else {
-      // Hide modal when no text is selected
-      wrapper.style.display = "none"
+      // Only hide if there's no selection
+      springAnimation({
+        from: 1, // Start from scale 1
+        to: 0, // End at scale 0
+        stiffness: 0.1,
+        damping: 0.85,
+        onUpdate: (scale) => {
+          modal.style.transform = `scale(${scale})`
+        },
+        onComplete: () => {
+          wrapper.style.display = "none"
+          console.log("Modal animation out completed")
+        },
+      })
     }
   })
 
@@ -213,18 +260,21 @@ function initSelectionBanner() {
   document.addEventListener("click", (event) => {
     if (!modal.contains(event.target) && wrapper.style.display === "flex") {
       const selection = window.getSelection()
+      // Only close if there's no selection or if the click was outside the selected text
       if (!selection.toString().trim()) {
-        wrapper.style.display = "none"
-      }
-    }
-  })
-
-  // Optional: Close modal when clicking outside
-  document.addEventListener("click", (event) => {
-    if (!modal.contains(event.target) && wrapper.style.display === "flex") {
-      const selection = window.getSelection()
-      if (!selection.toString().trim()) {
-        wrapper.style.display = "none"
+        lastSelectedText = "" // Reset the last selected text
+        springAnimation({
+          from: 1,
+          to: 0,
+          stiffness: 0.1,
+          damping: 0.85,
+          onUpdate: (scale) => {
+            modal.style.transform = `scale(${scale})`
+          },
+          onComplete: () => {
+            wrapper.style.display = "none"
+          },
+        })
       }
     }
   })
