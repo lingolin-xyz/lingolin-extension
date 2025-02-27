@@ -83,7 +83,6 @@ buttonContainer.style.cssText = `
 
 // Create Translate button
 const translateButton = document.createElement("button")
-translateButton.textContent = "Translate"
 translateButton.style.cssText = `
   background-color: black;
   color: yellow;
@@ -92,7 +91,38 @@ translateButton.style.cssText = `
   padding: 5px 15px;
   cursor: pointer;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 `
+
+// Create and add the SVG icon
+fetch(chrome.runtime.getURL("translate-icon.svg"))
+  .then((response) => response.text())
+  .then((svgText) => {
+    const parser = new DOMParser()
+    const svgDoc = parser.parseFromString(svgText, "image/svg+xml")
+    const svgElement = svgDoc.documentElement
+
+    // Adjust SVG size
+    svgElement.setAttribute("height", "20px")
+    svgElement.setAttribute("width", "20px")
+
+    // Set SVG color to match button text
+    svgElement.style.color = "yellow"
+
+    translateButton.appendChild(svgElement)
+
+    // Add text after the icon
+    const textSpan = document.createElement("span")
+    textSpan.textContent = "Translate"
+    translateButton.appendChild(textSpan)
+  })
+  .catch((error) => {
+    console.error("Error loading SVG:", error)
+    translateButton.textContent = "Translate" // Fallback to text-only
+  })
+
 translateButton.addEventListener("click", () => {
   const selectedText = window.getSelection()?.toString().trim()
   if (selectedText) {
@@ -103,7 +133,6 @@ translateButton.addEventListener("click", () => {
 
 // Create Copy button
 const copyButton = document.createElement("button")
-copyButton.textContent = "Copy to clipboard"
 copyButton.style.cssText = `
   background-color: black;
   color: yellow;
@@ -112,7 +141,38 @@ copyButton.style.cssText = `
   padding: 5px 15px;
   cursor: pointer;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 `
+
+// Create and add the SVG icon
+fetch(chrome.runtime.getURL("copy-icon.svg"))
+  .then((response) => response.text())
+  .then((svgText) => {
+    const parser = new DOMParser()
+    const svgDoc = parser.parseFromString(svgText, "image/svg+xml")
+    const svgElement = svgDoc.documentElement
+
+    // Adjust SVG size
+    svgElement.setAttribute("height", "20px")
+    svgElement.setAttribute("width", "20px")
+
+    // Set SVG color to match button text
+    svgElement.style.color = "yellow"
+
+    copyButton.appendChild(svgElement)
+
+    // Add text after the icon
+    const textSpan = document.createElement("span")
+    textSpan.textContent = "Copy to clipboard"
+    copyButton.appendChild(textSpan)
+  })
+  .catch((error) => {
+    console.error("Error loading SVG:", error)
+    copyButton.textContent = "Copy to clipboard" // Fallback to text-only
+  })
+
 copyButton.addEventListener("click", () => {
   const selectedText = window.getSelection()?.toString().trim()
   if (selectedText) {
@@ -120,10 +180,10 @@ copyButton.addEventListener("click", () => {
       .writeText(selectedText)
       .then(() => {
         // Optional: Show feedback that text was copied
-        const originalText = copyButton.textContent
-        copyButton.textContent = "Copied!"
+        const originalText = copyButton.querySelector("span").textContent
+        copyButton.querySelector("span").textContent = "Copied!"
         setTimeout(() => {
-          copyButton.textContent = originalText
+          copyButton.querySelector("span").textContent = originalText
         }, 1500)
       })
       .catch((err) => console.error("Failed to copy text: ", err))
