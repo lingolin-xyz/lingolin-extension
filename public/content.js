@@ -3,6 +3,19 @@ const MAX_TEXT_LENGTH = 144
 
 console.log(" 🍎 ->->-> Hello from content script")
 
+// Inject Google Font
+if (
+  !document.querySelector(
+    'link[href*="fonts.googleapis.com/css2?family=Grandstaner"]'
+  )
+) {
+  const link = document.createElement("link")
+  link.href =
+    "https://fonts.googleapis.com/css2?family=Grandstander:ital,wght@0,100..900;1,100..900&display=swap"
+  link.rel = "stylesheet"
+  document.head.appendChild(link)
+}
+
 // window.addEventListener("message", (event) => {
 //   if (event.data?.type === "EXTENSION_CHALLENGE") {
 //     // Sign the challenge (use a private key stored in extension)
@@ -61,6 +74,7 @@ modal.style.cssText = `
   text-align: center;
   font-size: 18px;
   font-weight: bold;
+  font-family: 'Grandstander', sans-serif;
   user-select: none;
   display: flex;
   flex-direction: column;
@@ -88,7 +102,7 @@ translateButton.style.cssText = `
   color: yellow;
   border: 1px solid yellow;
   border-radius: 6px;
-  padding: 5px 15px;
+  padding: 5px 15px 0px 15px;
   cursor: pointer;
   font-weight: bold;
   display: flex;
@@ -107,6 +121,7 @@ fetch(chrome.runtime.getURL("translate-icon.svg"))
     // Adjust SVG size
     svgElement.setAttribute("height", "20px")
     svgElement.setAttribute("width", "20px")
+    svgElement.setAttribute("style", "transform: translateY(-2px)")
 
     // Set SVG color to match button text
     svgElement.style.color = "yellow"
@@ -116,6 +131,7 @@ fetch(chrome.runtime.getURL("translate-icon.svg"))
     // Add text after the icon
     const textSpan = document.createElement("span")
     textSpan.textContent = "Translate"
+    textSpan.style.fontSize = "14px"
     translateButton.appendChild(textSpan)
   })
   .catch((error) => {
@@ -157,6 +173,7 @@ fetch(chrome.runtime.getURL("copy-icon.svg"))
     // Adjust SVG size
     svgElement.setAttribute("height", "20px")
     svgElement.setAttribute("width", "20px")
+    svgElement.setAttribute("style", "transform: translateY(-2px)")
 
     // Set SVG color to match button text
     svgElement.style.color = "yellow"
@@ -166,6 +183,7 @@ fetch(chrome.runtime.getURL("copy-icon.svg"))
     // Add text after the icon
     const textSpan = document.createElement("span")
     textSpan.textContent = "Copy to clipboard"
+    textSpan.style.fontSize = "14px"
     copyButton.appendChild(textSpan)
   })
   .catch((error) => {
