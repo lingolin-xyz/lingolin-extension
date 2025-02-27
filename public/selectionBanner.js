@@ -52,14 +52,17 @@ function initSelectionBanner() {
   // Create text container
   const textContainer = document.createElement("div")
   textContainer.id = "selection-text-container"
+  textContainer.style.fontSize = "24px"
+  textContainer.style.padding = "12px"
 
   // Create button container
   const buttonContainer = document.createElement("div")
   buttonContainer.style.cssText = `
     display: flex;
-    justify-content: space-around;
-    border-top: 1px solid yellow;
-    padding-top: 10px;
+    justify-content: center;
+    gap: 12px;
+    padding-top: 2px;
+    padding-bottom: 2px;
   `
 
   // Create Translate button
