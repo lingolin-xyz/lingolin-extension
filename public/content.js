@@ -24,5 +24,6 @@ document.body.appendChild(
 
 window.addEventListener("message", (event) => {
   if (event.source !== window || event.data.type !== "LINGOLIN_MESSAGE") return
-  console.log(" 🍎 ->->->", event.data.data)
+  chrome.storage.sync.set({ "lingolin-message": event.data.data })
+  console.log(" 🍎 ->->-> SAVED on localstorage:", event.data.data)
 })
