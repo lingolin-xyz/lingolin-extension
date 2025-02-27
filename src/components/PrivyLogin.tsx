@@ -1,4 +1,5 @@
 import { usePrivy } from "@privy-io/react-auth";
+import { Button } from "./ui/button";
 
 const PrivyLogin = () => {
   const { ready, authenticated, login, logout } = usePrivy();
@@ -7,17 +8,19 @@ const PrivyLogin = () => {
 
   if (authenticated) {
     return (
-      <div className="space-y-2">
+      <div className="space-y-2 bg-yellow-200 p-4 w-full flex flex-col items-center justify-center hello">
+        <Button onClick={logout}>Log out (shadcn button)</Button>
         <div className="text-2xl font-bold">You're in! LFG</div>
-        <button onClick={logout}>Log out</button>
       </div>
     );
   }
 
   return (
-    <button disabled={disableLogin} onClick={login}>
-      Log in
-    </button>
+    <div className="space-y-2 bg-yellow-200 p-4 w-full flex flex-col items-center justify-center hello">
+      <Button disabled={disableLogin} onClick={login}>
+        Log in
+      </Button>
+    </div>
   );
 };
 

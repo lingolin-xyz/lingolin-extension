@@ -1,8 +1,10 @@
 import { useState } from "react";
 import PrivyLogin from "./components/PrivyLogin";
+import UserDebugger from "./components/UserDebugger";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
-import "./App.css";
+
+import { usePrivy } from "@privy-io/react-auth";
 
 type UserSession = {
   id: string;
@@ -12,41 +14,19 @@ type UserSession = {
 };
 
 function App() {
+  const { user } = usePrivy();
   const [count, setCount] = useState(0);
   const [userSession, setUserSession] = useState<UserSession | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!userSession) {
-    return <PrivyLogin />;
-  }
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className="w-[500px] h-[500px] bg-purple-300 hello black mx-auto border-2 border-black p-4">
+      {/* <UserDebugger /> */}
+
+      {isLoading && <div>Loading...</div>}
+      {userSession && <div>User session found</div>}
+      {!userSession && <PrivyLogin />}
+    </div>
   );
 }
 
