@@ -1,10 +1,28 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import PrivyLogin from "./components/PrivyLogin";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
+
+type UserSession = {
+  id: string;
+  email: string;
+  name: string;
+  image: string;
+};
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+  const [userSession, setUserSession] = useState<UserSession | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!userSession) {
+    return <PrivyLogin />;
+  }
 
   return (
     <>
@@ -29,7 +47,7 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
