@@ -18,8 +18,8 @@ rootElement.render(
     <PrivyProvider
       appId={PRIVY_APP_ID}
       config={{
-        // Display email and wallet as login methods
-        loginMethods: ["email", "wallet"],
+        // Display email as only login method
+        loginMethods: ["email"],
         // Customize Privy's appearance in your app
         appearance: {
           theme: "light",
