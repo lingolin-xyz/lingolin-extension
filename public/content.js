@@ -62,8 +62,81 @@ modal.style.cssText = `
   font-size: 18px;
   font-weight: bold;
   user-select: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 `
 modal.id = "selection-modal"
+
+// Create text container
+const textContainer = document.createElement("div")
+textContainer.id = "selection-text-container"
+
+// Create button container
+const buttonContainer = document.createElement("div")
+buttonContainer.style.cssText = `
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid yellow;
+  padding-top: 10px;
+`
+
+// Create Translate button
+const translateButton = document.createElement("button")
+translateButton.textContent = "Translate"
+translateButton.style.cssText = `
+  background-color: black;
+  color: yellow;
+  border: 1px solid yellow;
+  border-radius: 6px;
+  padding: 5px 15px;
+  cursor: pointer;
+  font-weight: bold;
+`
+translateButton.addEventListener("click", () => {
+  const selectedText = window.getSelection()?.toString().trim()
+  if (selectedText) {
+    // TODO: Implement translation functionality
+    console.log("Translate:", selectedText)
+  }
+})
+
+// Create Copy button
+const copyButton = document.createElement("button")
+copyButton.textContent = "Copy to clipboard"
+copyButton.style.cssText = `
+  background-color: black;
+  color: yellow;
+  border: 1px solid yellow;
+  border-radius: 6px;
+  padding: 5px 15px;
+  cursor: pointer;
+  font-weight: bold;
+`
+copyButton.addEventListener("click", () => {
+  const selectedText = window.getSelection()?.toString().trim()
+  if (selectedText) {
+    navigator.clipboard
+      .writeText(selectedText)
+      .then(() => {
+        // Optional: Show feedback that text was copied
+        const originalText = copyButton.textContent
+        copyButton.textContent = "Copied!"
+        setTimeout(() => {
+          copyButton.textContent = originalText
+        }, 1500)
+      })
+      .catch((err) => console.error("Failed to copy text: ", err))
+  }
+})
+
+// Add buttons to button container
+buttonContainer.appendChild(translateButton)
+buttonContainer.appendChild(copyButton)
+
+// Add containers to modal
+modal.appendChild(textContainer)
+modal.appendChild(buttonContainer)
 
 // Add modal to wrapper and wrapper to document
 wrapper.appendChild(modal)
@@ -78,7 +151,7 @@ document.addEventListener("selectionchange", () => {
     wrapper.style.display = "flex"
 
     // Truncate text if too long
-    modal.textContent =
+    textContainer.textContent =
       selectedText.length > MAX_TEXT_LENGTH
         ? selectedText.slice(0, MAX_TEXT_LENGTH) + "..."
         : selectedText
