@@ -23,7 +23,11 @@ document.body.appendChild(
 )
 
 window.addEventListener("message", (event) => {
-  if (event.source !== window || event.data.type !== "LINGOLIN_MESSAGE") return
-  chrome.storage.sync.set({ "lingolin-message": event.data.data })
-  console.log(" 🍎 ->->-> SAVED on localstorage:", event.data.data)
+  if (event.source !== window || event.data.type !== "LINGOLIN_USER_ID") return
+  // Send message to background script instead of directly using chrome.storage
+  chrome.runtime.sendMessage({
+    type: "LINGOLIN_USER_ID",
+    data: event.data.data,
+  })
+  console.log(" 🍎 ->->-> SENT to background:", event.data)
 })
