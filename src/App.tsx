@@ -1,5 +1,15 @@
 import { useEffect, useState } from "react"
 
+// interface ChromeMessage {
+//   type: string
+//   data: LingolinMessage
+// }
+
+interface LingolinMessage {
+  id: string
+  email: string
+}
+
 function App() {
   const [isLoading, setIsLoading] = useState(true)
 
@@ -9,15 +19,21 @@ function App() {
     }, 200)
   }, [])
 
-  const [lingolinMessage, setLingolinMessage] = useState<any>(null)
+  const [lingolinMessage, setLingolinMessage] =
+    useState<LingolinMessage | null>(null)
 
   useEffect(() => {
     const getLingolinMessage = async () => {
       const { "lingolin-message": result } = await chrome.storage.sync.get(
         "lingolin-message"
       )
-      console.log("🍎 ->->->-> Local storage received!!!", result)
-      setLingolinMessage(result)
+      if (result.trim() !== "") {
+        const parsedResult = JSON.parse(result)
+        console.log("🍎 ->->->-> Local storage received!!!", parsedResult)
+        if (parsedResult) {
+          setLingolinMessage(parsedResult)
+        }
+      }
     }
     getLingolinMessage()
   }, [])
@@ -28,7 +44,8 @@ function App() {
       <div className="flex flex-col gap-4 p-4 bg-yellow-300 border-4 border-blue-800">
         {lingolinMessage && (
           <div>
-            <pre>{lingolinMessage.message}</pre>
+            <div className="text-3xl">{lingolinMessage.id}</div>
+            <div className="text-3xl">{lingolinMessage.email}</div>
           </div>
         )}
       </div>
