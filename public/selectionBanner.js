@@ -147,15 +147,21 @@ function initSelectionBanner() {
           textSpan.style.marginLeft = "5px"
           translateButton.appendChild(textSpan)
 
-          // Simulate backend call with 3-second delay
-          setTimeout(() => {
+          chrome.storage.sync.get("lingolin-message", (result) => {
+            const userData = result["lingolin-message"]
+              ? JSON.parse(result["lingolin-message"])
+              : null
+            const LOGGED_IN_USER_ID = userData ? userData.id : null
+
+            console.log("THE VALUE OF LOGGED_IN_USER_ID", LOGGED_IN_USER_ID)
+
             // TODO: Implement actual translation functionality
             console.log("Translate:", selectedText)
 
             // Restore original button content
             translateButton.innerHTML = originalButtonContent
             translateButton.disabled = false
-          }, 3000)
+          })
         })
         .catch((error) => {
           console.error("Error loading spinner SVG:", error)
