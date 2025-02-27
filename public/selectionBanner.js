@@ -35,7 +35,10 @@ function initSelectionBanner() {
     border-radius: 12px;
     width: 100%;
     max-width: 500px;
-    background-color: black;
+    background-color: #000000aa;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    
     color: yellow;
     padding: 10px;
     text-align: center;
@@ -72,7 +75,7 @@ function initSelectionBanner() {
     color: yellow;
     border: 1px solid yellow;
     border-radius: 6px;
-    padding: 5px 15px 0px 15px;
+    padding: 5px 15px 2px 15px;
     cursor: pointer;
     font-weight: bold;
     display: flex;
@@ -89,8 +92,8 @@ function initSelectionBanner() {
       const svgElement = svgDoc.documentElement
 
       // Adjust SVG size
-      svgElement.setAttribute("height", "20px")
-      svgElement.setAttribute("width", "20px")
+      svgElement.setAttribute("height", "18px")
+      svgElement.setAttribute("width", "18px")
       svgElement.setAttribute("style", "transform: translateY(-2px)")
 
       // Set SVG color to match button text
@@ -124,7 +127,7 @@ function initSelectionBanner() {
     color: yellow;
     border: 1px solid yellow;
     border-radius: 6px;
-    padding: 5px 15px;
+    padding: 5px 15px 2px 15px;
     cursor: pointer;
     font-weight: bold;
     display: flex;
@@ -141,8 +144,8 @@ function initSelectionBanner() {
       const svgElement = svgDoc.documentElement
 
       // Adjust SVG size
-      svgElement.setAttribute("height", "20px")
-      svgElement.setAttribute("width", "20px")
+      svgElement.setAttribute("height", "18px")
+      svgElement.setAttribute("width", "18px")
       svgElement.setAttribute("style", "transform: translateY(-2px)")
 
       // Set SVG color to match button text
@@ -152,31 +155,32 @@ function initSelectionBanner() {
 
       // Add text after the icon
       const textSpan = document.createElement("span")
-      textSpan.textContent = "Copy to clipboard"
+      textSpan.textContent = "Copy to Clipboard"
       textSpan.style.fontSize = "14px"
       copyButton.appendChild(textSpan)
+
+      copyButton.addEventListener("click", () => {
+        const selectedText = window.getSelection()?.toString().trim()
+        if (selectedText) {
+          navigator.clipboard
+            .writeText(selectedText)
+            .then(() => {
+              const originalText = textSpan.textContent
+              textSpan.textContent = "Copied!"
+              textSpan.style.color = "oklch(0.765 0.177 163.223)"
+              setTimeout(() => {
+                textSpan.textContent = originalText
+                textSpan.style.color = "yellow"
+              }, 500)
+            })
+            .catch((err) => console.error("Failed to copy:", err))
+        }
+      })
     })
     .catch((error) => {
       console.error("Error loading SVG:", error)
-      copyButton.textContent = "Copy to clipboard" // Fallback to text-only
+      copyButton.textContent = "Copy to Clipboard fallback" // Fallback to text-only
     })
-
-  copyButton.addEventListener("click", () => {
-    const selectedText = window.getSelection()?.toString().trim()
-    if (selectedText) {
-      navigator.clipboard
-        .writeText(selectedText)
-        .then(() => {
-          // Optional: Show feedback that text was copied
-          const originalText = copyButton.querySelector("span").textContent
-          copyButton.querySelector("span").textContent = "Copied!"
-          setTimeout(() => {
-            copyButton.querySelector("span").textContent = originalText
-          }, 1500)
-        })
-        .catch((err) => console.error("Failed to copy text: ", err))
-    }
-  })
 
   // Add buttons to button container
   buttonContainer.appendChild(translateButton)
