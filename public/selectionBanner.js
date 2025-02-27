@@ -115,8 +115,59 @@ function initSelectionBanner() {
   translateButton.addEventListener("click", () => {
     const selectedText = window.getSelection()?.toString().trim()
     if (selectedText) {
-      // TODO: Implement translation functionality
-      console.log("Translate:", selectedText)
+      // Save the original button content
+      const originalButtonContent = translateButton.innerHTML
+
+      // Immediately replace button content with a temporary loading indicator
+      translateButton.innerHTML =
+        '<span style="font-size: 14px;">Loading...</span>'
+      translateButton.disabled = true
+
+      // Load and add the spinner SVG
+      fetch(chrome.runtime.getURL("spinner-icon.svg"))
+        .then((response) => response.text())
+        .then((svgText) => {
+          const parser = new DOMParser()
+          const svgDoc = parser.parseFromString(svgText, "image/svg+xml")
+          const svgElement = svgDoc.documentElement
+
+          // Adjust SVG size and color
+          svgElement.setAttribute("height", "18px")
+          svgElement.setAttribute("width", "18px")
+          svgElement.style.color = "yellow"
+
+          // Clear the temporary loading text and add the spinner
+          translateButton.innerHTML = ""
+          translateButton.appendChild(svgElement)
+
+          // Add "Loading..." text
+          const textSpan = document.createElement("span")
+          textSpan.textContent = "translating..."
+          textSpan.style.fontSize = "14px"
+          textSpan.style.marginLeft = "5px"
+          translateButton.appendChild(textSpan)
+
+          // Simulate backend call with 3-second delay
+          setTimeout(() => {
+            // TODO: Implement actual translation functionality
+            console.log("Translate:", selectedText)
+
+            // Restore original button content
+            translateButton.innerHTML = originalButtonContent
+            translateButton.disabled = false
+          }, 3000)
+        })
+        .catch((error) => {
+          console.error("Error loading spinner SVG:", error)
+          translateButton.textContent = "Loading..." // Fallback
+
+          // Simulate backend call with 3-second delay
+          setTimeout(() => {
+            // Restore original button content
+            translateButton.innerHTML = originalButtonContent
+            translateButton.disabled = false
+          }, 3000)
+        })
     }
   })
 
