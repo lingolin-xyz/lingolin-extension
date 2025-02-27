@@ -155,12 +155,46 @@ function initSelectionBanner() {
 
             console.log("THE VALUE OF LOGGED_IN_USER_ID", LOGGED_IN_USER_ID)
 
-            // TODO: Implement actual translation functionality
-            console.log("Translate:", selectedText)
+            // make POST request to http://localhost:3000/api/translate passing the LOGGED IN ID and the selected message
+            fetch("http://localhost:3000/api/translate", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                userId: LOGGED_IN_USER_ID,
+                text: selectedText,
+              }),
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error("Translation request failed")
+                }
+                return response.json()
+              })
+              .then((data) => {
+                console.log("Translation successful:", data)
 
-            // Restore original button content
-            translateButton.innerHTML = originalButtonContent
-            translateButton.disabled = false
+                // Update the text container with the translated text
+                if (data.translatedText) {
+                  textContainer.innerHTML = `
+                  <div style="font-size: 16px; color: #cccccc; margin-bottom: 8px;">Translation:</div>
+                  <div>${data.translatedText}</div>
+                `
+                }
+              })
+              .catch((error) => {
+                console.error("Translation error:", error)
+                textContainer.innerHTML = `
+                <div style="color: #ff6666;">Translation failed. Please try again.</div>
+                <div style="font-size: 18px; margin-top: 8px;">${selectedText}</div>
+              `
+              })
+              .finally(() => {
+                // Restore original button content
+                translateButton.innerHTML = originalButtonContent
+                translateButton.disabled = false
+              })
           })
         })
         .catch((error) => {
@@ -267,16 +301,6 @@ function initSelectionBanner() {
     } else {
       // Hide modal when no text is selected
       wrapper.style.display = "none"
-    }
-  })
-
-  // Optional: Close modal when clicking outside
-  document.addEventListener("click", (event) => {
-    if (!modal.contains(event.target) && wrapper.style.display === "flex") {
-      const selection = window.getSelection()
-      if (!selection.toString().trim()) {
-        wrapper.style.display = "none"
-      }
     }
   })
 
