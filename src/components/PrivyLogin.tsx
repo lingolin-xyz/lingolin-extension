@@ -7,8 +7,8 @@ const PrivyLogin = () => {
 
   if (authenticated) {
     return (
-      <div>
-        <div>You're in!</div>
+      <div className="space-y-2">
+        <div className="text-2xl font-bold">You're in! LFG</div>
         <button onClick={logout}>Log out</button>
       </div>
     );
