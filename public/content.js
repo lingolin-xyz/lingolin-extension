@@ -21,3 +21,8 @@ window.hasLingolin = true // Global variable
 document.body.appendChild(
   Object.assign(document.createElement("div"), { id: "lingolin-marker" })
 )
+
+window.addEventListener("message", (event) => {
+  if (event.source !== window || event.data.type !== "LINGOLIN_MESSAGE") return
+  console.log(" 🍎 ->->->", event.data.data)
+})
