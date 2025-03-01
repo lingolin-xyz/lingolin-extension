@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
-
+import NeedToSignIn from "./components/NeedToSignIn"
 interface UserSession {
   id: string
   email: string
@@ -47,20 +47,18 @@ function App() {
   }, [])
 
   return (
-    <div className="w-[500px] h-[500px] bg-purple-300 hello black mx-auto border-2 border-black p-4">
+    <div className="w-[360px] h-[440px] mx-auto p-2">
       {isLoading ? (
         <div>Loading...</div>
       ) : (
-        <div className="flex flex-col gap-4 p-4 bg-yellow-300 border-4 border-blue-800">
+        <div className="flex flex-col gap-4">
           {userSession ? (
             <div>
               <div className="text-3xl">{userSession.id}</div>
               <div className="text-3xl">{userSession.email}</div>
             </div>
           ) : (
-            <div>
-              <div className="text-3xl">No user session found</div>
-            </div>
+            <NeedToSignIn />
           )}
         </div>
       )}
