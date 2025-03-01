@@ -47,7 +47,7 @@ function App() {
   }, [])
 
   return (
-    <div className="w-[360px] h-[440px] mx-auto p-2">
+    <div className="w-[360px] h-[440px] mx-auto p-2 font-grandstander">
       {isLoading ? (
         <div>Loading...</div>
       ) : (
