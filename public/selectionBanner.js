@@ -34,7 +34,7 @@ function initSelectionBanner() {
     border: 2px solid yellow;
     border-radius: 12px;
     width: 100%;
-    max-width: 500px;
+    max-width: 580px;
     background-color: #000000aa;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
