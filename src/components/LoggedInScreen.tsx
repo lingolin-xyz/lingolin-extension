@@ -35,14 +35,16 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
   const handleTargetLanguageChange = (value: string) => {
     setTargetLanguage(value)
     if (chrome.storage) {
-      chrome.storage.sync.set({ targetLanguage: value })
+      const newStorage = { targetLanguage: value, nativeLanguage }
+      chrome.storage.sync.set(newStorage)
     }
   }
 
   const handleNativeLanguageChange = (value: string) => {
     setNativeLanguage(value)
     if (chrome.storage) {
-      chrome.storage.sync.set({ nativeLanguage: value })
+      const newStorage = { targetLanguage, nativeLanguage: value }
+      chrome.storage.sync.set(newStorage)
     }
   }
 
