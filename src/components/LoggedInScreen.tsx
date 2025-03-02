@@ -54,8 +54,8 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
 
       <BlurryEntranceSuperFast delay={0.11}>
         <div className="flex w-[320px] justify-center gap-4 bg-zinc-100 p-3 rounded-xl">
-          <div className="flex flex-col gap-1">
-            <div className="text-sm font-bold">From:</div>
+          <div className="flex flex-col gap-1 flex-1">
+            <div className="text-xs font-bold">Native language:</div>
             <Select
               value={nativeLanguage}
               defaultValue="English"
@@ -77,8 +77,8 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
               </SelectContent>
             </Select>
           </div>
-          <div className="flex flex-col gap-1">
-            <div className="text-sm font-bold">To:</div>
+          <div className="flex flex-col gap-1 flex-1">
+            <div className="text-xs font-bold">Target language:</div>
             <Select
               value={targetLanguage}
               defaultValue="English"
