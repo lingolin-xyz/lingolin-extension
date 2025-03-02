@@ -8,6 +8,15 @@
   --font-grandstander: "Grandstander", cursive;
 }
 
+body,
+html {
+  width: 360px;
+  height: 440px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 :root {
   --smolYellow: #ffff33;
   --smolGreen: #47ec93;

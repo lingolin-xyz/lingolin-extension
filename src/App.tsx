@@ -49,7 +49,7 @@ function App() {
   }, [])
 
   return (
-    <div className="w-[360px] h-[440px] mx-auto p-2 font-grandstander bg-white">
+    <div className="w-[360px] h-[440px] mx-auto p-2 font-grandstander bg-white overflow-y-auto">
       {isLoading ? (
         <LoadingScreen />
       ) : (
