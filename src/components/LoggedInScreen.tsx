@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "./ui/select"
 import BlurryEntranceSuperFast from "./BlurryEntranceSuperFast"
+import { AVALIABLE_LANGUANGES } from "@/lib/constants"
 // import { Button } from "./ui/button"
 
 const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
@@ -50,7 +51,7 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
       </BlurryEntranceSuperFast>
       <BlurryEntranceSuperFast delay={0.2}>
         <div className="flex w-full justify-center gap-4 bg-zinc-100 p-3 rounded-xl">
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1">
             <div className="text-sm font-bold">From:</div>
             <Select
               value={targetLanguage}
@@ -61,21 +62,19 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
                 <SelectValue placeholder="Select a language" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="English">English</SelectItem>
-                <SelectItem value="Spanish">Spanish</SelectItem>
-                <SelectItem value="French">French</SelectItem>
-                <SelectItem value="German">German</SelectItem>
-                <SelectItem value="Italian">Italian</SelectItem>
-                <SelectItem value="Portuguese">Portuguese</SelectItem>
-                <SelectItem value="Russian">Russian</SelectItem>
-                <SelectItem value="Chinese">Chinese</SelectItem>
-                <SelectItem value="Japanese">Japanese</SelectItem>
-                <SelectItem value="Indonesian">Indonesian</SelectItem>
-                <SelectItem value="Hebrew">Hebrew</SelectItem>
+                {AVALIABLE_LANGUANGES.map((language) => (
+                  <SelectItem
+                    key={language}
+                    value={language}
+                    className="font-grandstander"
+                  >
+                    {language}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1">
             <div className="text-sm font-bold">To:</div>
             <Select
               value={targetLanguage}
@@ -86,17 +85,15 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
                 <SelectValue placeholder="Select a language" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="English">English</SelectItem>
-                <SelectItem value="Spanish">Spanish</SelectItem>
-                <SelectItem value="French">French</SelectItem>
-                <SelectItem value="German">German</SelectItem>
-                <SelectItem value="Italian">Italian</SelectItem>
-                <SelectItem value="Portuguese">Portuguese</SelectItem>
-                <SelectItem value="Russian">Russian</SelectItem>
-                <SelectItem value="Chinese">Chinese</SelectItem>
-                <SelectItem value="Japanese">Japanese</SelectItem>
-                <SelectItem value="Indonesian">Indonesian</SelectItem>
-                <SelectItem value="Hebrew">Hebrew</SelectItem>
+                {AVALIABLE_LANGUANGES.map((language) => (
+                  <SelectItem
+                    key={language}
+                    value={language}
+                    className="font-grandstander"
+                  >
+                    {language}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
