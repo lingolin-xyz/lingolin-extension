@@ -105,6 +105,7 @@ function initSelectionBanner() {
       const textSpan = document.createElement("span")
       textSpan.textContent = "Translate"
       textSpan.style.fontSize = "14px"
+      textSpan.style.fontFamily = "Grandstander"
       translateButton.appendChild(textSpan)
     })
     .catch((error) => {
@@ -112,7 +113,7 @@ function initSelectionBanner() {
       translateButton.textContent = "Translate" // Fallback to text-only
     })
 
-  translateButton.addEventListener("click", () => {
+  translateButton.addEventListener("click", async () => {
     const selectedText = window.getSelection()?.toString().trim()
     if (selectedText) {
       // Save the original button content
@@ -126,7 +127,7 @@ function initSelectionBanner() {
       // Load and add the spinner SVG
       fetch(chrome.runtime.getURL("spinner-icon.svg"))
         .then((response) => response.text())
-        .then((svgText) => {
+        .then(async (svgText) => {
           const parser = new DOMParser()
           const svgDoc = parser.parseFromString(svgText, "image/svg+xml")
           const svgElement = svgDoc.documentElement
@@ -144,58 +145,58 @@ function initSelectionBanner() {
           const textSpan = document.createElement("span")
           textSpan.textContent = "translating..."
           textSpan.style.fontSize = "14px"
+          textSpan.style.fontFamily = "Grandstander"
           textSpan.style.marginLeft = "5px"
           translateButton.appendChild(textSpan)
 
-          chrome.storage.sync.get("lingolin-message", (result) => {
-            const userData = result["lingolin-message"]
-              ? JSON.parse(result["lingolin-message"])
-              : null
-            const LOGGED_IN_USER_ID = userData ? userData.id : null
+          const { nativeLanguage, targetLanguage, userData } =
+            await readSessionValues()
 
-            console.log("THE VALUE OF LOGGED_IN_USER_ID", LOGGED_IN_USER_ID)
+          console.log("THE VALUE OF USER DATA", userData)
+          console.log("THE VALUE OF NATIVE LANGUAGE", nativeLanguage)
+          console.log("THE VALUE OF TARGET LANGUAGE", targetLanguage)
+          console.log("THE VALUE OF SELECTED TEXT", selectedText)
 
-            // make POST request to http://localhost:3000/api/translate passing the LOGGED IN ID and the selected message
-            fetch("http://localhost:3000/api/translate", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                userId: LOGGED_IN_USER_ID,
-                text: selectedText,
-              }),
-            })
-              .then((response) => {
-                if (!response.ok) {
-                  throw new Error("Translation request failed")
-                }
-                return response.json()
-              })
-              .then((data) => {
-                console.log("Translation successful:", data)
+          // console.log("THE VALUE OF LOGGED_IN_USER_ID", LOGGED_IN_USER_ID)
 
-                // Update the text container with the translated text
-                if (data.translatedText) {
-                  textContainer.innerHTML = `
-                  <div style="font-size: 16px; color: #cccccc; margin-bottom: 8px;">Translation:</div>
-                  <div>${data.translatedText}</div>
-                `
-                }
-              })
-              .catch((error) => {
-                console.error("Translation error:", error)
-                textContainer.innerHTML = `
-                <div style="color: #ff6666;">Translation failed. Please try again.</div>
-                <div style="font-size: 18px; margin-top: 8px;">${selectedText}</div>
-              `
-              })
-              .finally(() => {
-                // Restore original button content
-                translateButton.innerHTML = originalButtonContent
-                translateButton.disabled = false
-              })
-          })
+          // try {
+          //   const response = await fetch(
+          //     "http://localhost:3000/api/translate",
+          //     {
+          //       method: "POST",
+          //       headers: {
+          //         "Content-Type": "application/json",
+          //       },
+          //       body: JSON.stringify({
+          //         userId: LOGGED_IN_USER_ID,
+          //         text: selectedText,
+          //       }),
+          //     }
+          //   )
+
+          //   const data = await response.json()
+          //   if (data.translatedText) {
+          //     textContainer.innerHTML = `
+          //           <div style="font-size: 16px; color: #cccccc; margin-bottom: 8px;">Translation:</div>
+          //           <div>${data.translatedText}</div>
+          //         `
+          //   } else {
+          //     textContainer.innerHTML = `
+          //       <div style="color: #ff6666;">Translation failed. Please try again.</div>
+          //       <div style="font-size: 18px; margin-top: 8px;">${selectedText}</div>
+          //     `
+          //   }
+          // } catch (error) {
+          //   console.error("Translation error:", error)
+          //   textContainer.innerHTML = `
+          //     <div style="color: #ff6666;">Translation failed. Please try again.</div>
+          //     <div style="font-size: 18px; margin-top: 8px;">${selectedText}</div>
+          //   `
+          // } finally {
+          //   // This code always runs, whether there was an error or not
+          //   translateButton.innerHTML = originalButtonContent
+          //   translateButton.disabled = false
+          // }
         })
         .catch((error) => {
           console.error("Error loading spinner SVG:", error)
@@ -248,6 +249,7 @@ function initSelectionBanner() {
       const textSpan = document.createElement("span")
       textSpan.textContent = "Copy to Clipboard"
       textSpan.style.fontSize = "14px"
+      textSpan.style.fontFamily = "Grandstander"
       copyButton.appendChild(textSpan)
 
       copyButton.addEventListener("click", () => {
@@ -258,6 +260,7 @@ function initSelectionBanner() {
             .then(() => {
               const originalText = textSpan.textContent
               textSpan.textContent = "Copied!"
+              textSpan.style.fontFamily = "Grandstander"
               textSpan.style.color = "oklch(0.765 0.177 163.223)"
               setTimeout(() => {
                 textSpan.textContent = originalText
@@ -318,3 +321,21 @@ function initSelectionBanner() {
 console.log("hello from selection banner!!! 💛 💛 💛 💛 ")
 
 initSelectionBanner()
+
+const readSessionValues = async () => {
+  const {
+    nativeLanguage,
+    targetLanguage,
+    "lingolin-message": userData,
+  } = await chrome.storage.sync.get([
+    "nativeLanguage",
+    "targetLanguage",
+    "lingolin-message",
+  ])
+
+  return {
+    nativeLanguage,
+    targetLanguage,
+    userData: userData ? JSON.parse(userData) : false,
+  }
+}
