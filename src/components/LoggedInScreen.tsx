@@ -13,7 +13,8 @@ import { AVALIABLE_LANGUANGES } from "@/lib/constants"
 // import { Button } from "./ui/button"
 
 const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
-  const [targetLanguage, setTargetLanguage] = useState("English")
+  const [targetLanguage, setTargetLanguage] = useState("Spanish")
+  const [nativeLanguage, setNativeLanguage] = useState("English")
 
   useEffect(() => {
     if (chrome.storage) {
@@ -23,14 +24,25 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
           setTargetLanguage(result.targetLanguage)
         }
       })
+      chrome.storage.sync.get(["nativeLanguage"], (result) => {
+        if (result.nativeLanguage) {
+          setNativeLanguage(result.nativeLanguage)
+        }
+      })
     }
   }, [])
 
-  const handleLanguageChange = (value: string) => {
+  const handleTargetLanguageChange = (value: string) => {
     setTargetLanguage(value)
-    // Save to chrome.storage.sync
     if (chrome.storage) {
       chrome.storage.sync.set({ targetLanguage: value })
+    }
+  }
+
+  const handleNativeLanguageChange = (value: string) => {
+    setNativeLanguage(value)
+    if (chrome.storage) {
+      chrome.storage.sync.set({ nativeLanguage: value })
     }
   }
 
@@ -41,13 +53,13 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
       </BlurryEntranceSuperFast>
 
       <BlurryEntranceSuperFast delay={0.11}>
-        <div className="flex w-full justify-center gap-4 bg-zinc-100 p-3 rounded-xl">
+        <div className="flex w-[320px] justify-center gap-4 bg-zinc-100 p-3 rounded-xl">
           <div className="flex flex-col gap-1">
             <div className="text-sm font-bold">From:</div>
             <Select
-              value={targetLanguage}
+              value={nativeLanguage}
               defaultValue="English"
-              onValueChange={handleLanguageChange}
+              onValueChange={handleNativeLanguageChange}
             >
               <SelectTrigger className="!bg-white">
                 <SelectValue placeholder="Select a language" />
@@ -70,7 +82,7 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
             <Select
               value={targetLanguage}
               defaultValue="English"
-              onValueChange={handleLanguageChange}
+              onValueChange={handleTargetLanguageChange}
             >
               <SelectTrigger className="!bg-white">
                 <SelectValue placeholder="Select a language" />
