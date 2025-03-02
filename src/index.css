@@ -9,13 +9,18 @@
 }
 
 :root {
+  --smolYellow: #ffff33;
+  --smolGreen: #47ec93;
+  --smolRed: #fe2c55;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: light;
+  color: #242424;
+  background-color: rgba(255, 255, 255, 0.87);
+  /* color: rgba(255, 255, 255, 0.87);
+  background-color: #242424; */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -110,7 +115,7 @@ button:focus-visible {
   }
 }
 
-.dark {
+/* .dark {
   --background: oklch(0.141 0.005 285.823);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.141 0.005 285.823);
@@ -143,7 +148,7 @@ button:focus-visible {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.274 0.006 286.033);
   --sidebar-ring: oklch(0.442 0.017 285.786);
-}
+} */
 
 @theme inline {
   --color-background: var(--background);
@@ -188,9 +193,9 @@ button:focus-visible {
   * {
     @apply border-border outline-ring/50;
   }
-  body {
+  /* body {
     @apply bg-background text-foreground;
-  }
+  } */
 }
 
 .hello {
