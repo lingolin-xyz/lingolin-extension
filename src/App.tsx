@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
 import NeedToSignIn from "./components/NeedToSignIn"
+import LoadingScreen from "./components/LoadingScreen"
 interface UserSession {
   id: string
   email: string
@@ -49,7 +50,7 @@ function App() {
   return (
     <div className="w-[360px] h-[440px] mx-auto p-2 font-grandstander">
       {isLoading ? (
-        <div>Loading...</div>
+        <LoadingScreen />
       ) : (
         <div className="flex flex-col gap-4">
           {userSession ? (
