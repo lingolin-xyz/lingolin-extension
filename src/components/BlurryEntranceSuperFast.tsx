@@ -20,8 +20,8 @@ function BlurryEntranceSuperFast({
     <motion.div
       initial={{
         opacity: 0,
-        y: 20,
-        filter: "blur(10px)",
+        y: 16,
+        filter: "blur(5px)",
         // scale: 0.7,
       }}
       whileInView={{
@@ -32,8 +32,8 @@ function BlurryEntranceSuperFast({
       }}
       transition={{
         delay,
-        duration: 0.11,
-        ease: "easeOut",
+        // duration: 0.11,
+        // ease: "easeOut",
       }}
       viewport={{ once: true }}
       className={`${wFull && "w-full"} ${hFull && "h-full"}`}
