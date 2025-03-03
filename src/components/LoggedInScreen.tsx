@@ -1,5 +1,4 @@
 import { UserSession } from "@/lib/types"
-import Title from "./Title"
 import { useEffect, useState } from "react"
 import {
   Select,
@@ -10,7 +9,7 @@ import {
 } from "./ui/select"
 import BlurryEntranceSuperFast from "./BlurryEntranceSuperFast"
 import { AVALIABLE_LANGUANGES } from "@/lib/constants"
-// import { Button } from "./ui/button"
+import BlurryEntrance from "./BlurryEntrance"
 
 const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
   const [targetLanguage, setTargetLanguage] = useState("")
@@ -50,24 +49,20 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
 
   return (
     <div className="flex flex-col items-center justify-center h-full p-4 gap-4">
-      {userSession && userSession.email && (
-        <BlurryEntranceSuperFast>
-          <Title>Hi, {userSession.email.split("@")[0]}!</Title>
-        </BlurryEntranceSuperFast>
-      )}
-
-      <BlurryEntranceSuperFast delay={0.11}>
-        <div className="flex w-[320px] justify-center gap-4 bg-zinc-100 p-3 rounded-xl">
+      <BlurryEntranceSuperFast delay={0.03}>
+        <div className="flex flex-col w-[320px] justify-center gap-4 bg-zinc-100 p-3 rounded-xl">
           <div className="flex flex-col gap-1 flex-1">
-            <div className="text-xs font-bold">Native language:</div>
+            <div className="text-base font-bold">
+              Your main/native language:
+            </div>
             <Select
               value={nativeLanguage}
               onValueChange={handleNativeLanguageChange}
             >
-              <SelectTrigger className="!bg-white">
+              <SelectTrigger className="!bg-white !text-base !font-semibold !p-0 !px-3">
                 <SelectValue placeholder="Please Select" />
               </SelectTrigger>
-              <SelectContent className="max-h-[260px] overflow-y-auto">
+              <SelectContent className="max-h-[240px] overflow-y-auto">
                 {AVALIABLE_LANGUANGES.map((language) => (
                   <SelectItem
                     key={language}
@@ -81,15 +76,17 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
             </Select>
           </div>
           <div className="flex flex-col gap-1 flex-1">
-            <div className="text-xs font-bold">Target language:</div>
+            <div className="text-base font-bold">
+              The language you want to learn:
+            </div>
             <Select
               value={targetLanguage}
               onValueChange={handleTargetLanguageChange}
             >
-              <SelectTrigger className="!bg-white">
+              <SelectTrigger className="!bg-white !text-base !font-semibold !p-0 !px-3">
                 <SelectValue placeholder="Please Select" />
               </SelectTrigger>
-              <SelectContent className="max-h-[260px] overflow-y-auto">
+              <SelectContent className="max-h-[240px] overflow-y-auto">
                 {AVALIABLE_LANGUANGES.map((language) => (
                   <SelectItem
                     key={language}
@@ -102,6 +99,25 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
               </SelectContent>
             </Select>
           </div>
+        </div>
+      </BlurryEntranceSuperFast>
+
+      <BlurryEntranceSuperFast delay={0.15}>
+        <div className="flex items-center justify-center gap-3">
+          <BlurryEntrance delay={0.18}>
+            <img
+              src="https://javitoshi.com/images/lingolin.png"
+              alt="lingolin"
+              className="w-14 h-14"
+            />
+          </BlurryEntrance>
+          <BlurryEntrance delay={0.28}>
+            {userSession && userSession.email && (
+              <div className="font-semibold text-xl">
+                Hi, {userSession.email.split("@")[0]}!
+              </div>
+            )}
+          </BlurryEntrance>
         </div>
       </BlurryEntranceSuperFast>
 
