@@ -185,6 +185,82 @@ function initSelectionBanner() {
                     <div style="font-size: 16px; color: #cccccc; margin-bottom: 8px;">Translation in ${data.targetLanguage}:</div>
                     <div>${data.translatedMessage}</div>
                   `
+
+              // Replace translate button with More and Copy buttons
+              buttonContainer.innerHTML = ""
+
+              // Add More button
+              const moreButton = document.createElement("button")
+              moreButton.style.cssText = translateButton.style.cssText
+              moreButton.innerHTML =
+                '<span style="font-size: 14px; font-family: Grandstander">More</span>'
+              moreButton.addEventListener("click", () => {
+                // TODO: Add your external website URL here
+                const textToAskChatGPT = `Please explain to me this translation. I am learning ${data.targetLanguage} and i am from ${data.nativeLanguage}).
+                
+<TextISelectedToTranslate>
+${selectedText}
+</TextISelectedToTranslate>        
+        
+<TranslationOutput>
+${data.translatedMessage}
+</TranslationOutput>
+
+Please explain to me the key parts of the translation. Thank you and LFG!`
+                window.open(
+                  `https://chatgpt.com/?q=${encodeURIComponent(
+                    textToAskChatGPT
+                  )}`,
+                  "_blank"
+                )
+              })
+
+              // Add Copy button with icon
+              const copyButton = document.createElement("button")
+              copyButton.style.cssText = translateButton.style.cssText
+
+              fetch(chrome.runtime.getURL("copy-icon.svg"))
+                .then((response) => response.text())
+                .then((svgText) => {
+                  const parser = new DOMParser()
+                  const svgDoc = parser.parseFromString(
+                    svgText,
+                    "image/svg+xml"
+                  )
+                  const svgElement = svgDoc.documentElement
+                  svgElement.setAttribute("height", "18px")
+                  svgElement.setAttribute("width", "18px")
+                  svgElement.setAttribute(
+                    "style",
+                    "transform: translateY(-2px)"
+                  )
+                  svgElement.style.color = "yellow"
+
+                  copyButton.appendChild(svgElement)
+                  const textSpan = document.createElement("span")
+                  textSpan.textContent = "Copy"
+                  textSpan.style.fontSize = "14px"
+                  textSpan.style.fontFamily = "Grandstander"
+                  copyButton.appendChild(textSpan)
+                })
+
+              copyButton.addEventListener("click", () => {
+                navigator.clipboard
+                  .writeText(data.translatedMessage)
+                  .then(() => {
+                    const textSpan = copyButton.querySelector("span")
+                    const originalText = textSpan.textContent
+                    textSpan.textContent = "Copied!"
+                    textSpan.style.color = "oklch(0.765 0.177 163.223)"
+                    setTimeout(() => {
+                      textSpan.textContent = originalText
+                      textSpan.style.color = "yellow"
+                    }, 500)
+                  })
+              })
+
+              buttonContainer.appendChild(moreButton)
+              buttonContainer.appendChild(copyButton)
             } else {
               textContainer.innerHTML = `
                 <div style="color: #ff6666;">Translation failed. Please try again.</div>
