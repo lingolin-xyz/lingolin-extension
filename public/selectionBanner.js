@@ -116,6 +116,15 @@ function initSelectionBanner() {
   translateButton.addEventListener("click", async () => {
     const selectedText = window.getSelection()?.toString().trim()
     if (selectedText) {
+      const { nativeLanguage, targetLanguage, userData } =
+        await readSessionValues()
+
+      console.log(" !!! USER DATA", { userData })
+
+      if (!userData) {
+        alert("No user session, please log in")
+      }
+
       // Save the original button content
       const originalButtonContent = translateButton.innerHTML
 
@@ -148,9 +157,6 @@ function initSelectionBanner() {
           textSpan.style.fontFamily = "Grandstander"
           textSpan.style.marginLeft = "5px"
           translateButton.appendChild(textSpan)
-
-          const { nativeLanguage, targetLanguage, userData } =
-            await readSessionValues()
 
           try {
             const response = await fetch(
@@ -472,6 +478,10 @@ const readSessionValues = async () => {
   return {
     nativeLanguage,
     targetLanguage,
-    userData: userData ? JSON.parse(userData) : false,
+    userData: userData
+      ? JSON.parse(userData).userId
+        ? JSON.parse(userData)
+        : false
+      : false,
   }
 }
