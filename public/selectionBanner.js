@@ -103,14 +103,14 @@ function initSelectionBanner() {
 
       // Add text after the icon
       const textSpan = document.createElement("span")
-      textSpan.textContent = "Translate"
+      textSpan.textContent = "Translate [T]"
       textSpan.style.fontSize = "14px"
       textSpan.style.fontFamily = "Grandstander"
       translateButton.appendChild(textSpan)
     })
     .catch((error) => {
       console.error("Error loading SVG:", error)
-      translateButton.textContent = "Translate" // Fallback to text-only
+      translateButton.textContent = "Translate [T]" // Fallback to text-only
     })
 
   translateButton.addEventListener("click", async () => {
@@ -161,7 +161,7 @@ function initSelectionBanner() {
 
           try {
             const response = await fetch(
-              "http://localhost:3000/api/v1/translate",
+              "https://lingolin.xyz/api/v1/translate",
               {
                 method: "POST",
                 headers: {
@@ -185,6 +185,128 @@ function initSelectionBanner() {
                     <div style="font-size: 16px; color: #cccccc; margin-bottom: 8px;">Translation in ${data.targetLanguage}:</div>
                     <div>${data.translatedMessage}</div>
                   `
+
+              // Replace translate button with More and Copy buttons
+              buttonContainer.innerHTML = ""
+
+              // Add More button
+              const moreButton = document.createElement("button")
+              moreButton.style.cssText =
+                translateButton.style.cssText +
+                `
+                transition: border-color 0.2s ease;
+              `
+              moreButton.addEventListener("mouseover", () => {
+                moreButton.style.borderColor = "#10B981"
+              })
+              moreButton.addEventListener("mouseout", () => {
+                moreButton.style.borderColor = "yellow"
+              })
+
+              fetch(chrome.runtime.getURL("openai-icon.svg"))
+                .then((response) => response.text())
+                .then((svgText) => {
+                  const parser = new DOMParser()
+                  const svgDoc = parser.parseFromString(
+                    svgText,
+                    "image/svg+xml"
+                  )
+                  const svgElement = svgDoc.documentElement
+                  svgElement.setAttribute("height", "18px")
+                  svgElement.setAttribute("width", "18px")
+                  svgElement.setAttribute(
+                    "style",
+                    "transform: translateY(-2px)"
+                  )
+                  svgElement.style.color = "yellow"
+
+                  moreButton.appendChild(svgElement)
+                  const textSpan = document.createElement("span")
+                  textSpan.textContent = "More"
+                  textSpan.style.fontSize = "14px"
+                  textSpan.style.fontFamily = "Grandstander"
+                  moreButton.appendChild(textSpan)
+                })
+
+              moreButton.addEventListener("click", () => {
+                // TODO: Add your external website URL here
+                const textToAskChatGPT = `Please explain to me this translation. I am learning ${data.targetLanguage} and my native language is ${nativeLanguage}).
+                
+<TextISelectedToTranslate>
+${selectedText}
+</TextISelectedToTranslate>        
+        
+<TranslationOutput>
+${data.translatedMessage}
+</TranslationOutput>
+
+Please explain to me the key parts of the translation. Explain it to me in **${nativeLanguage}** because that's my native language.
+
+Thank you and LFG!`
+                window.open(
+                  `https://chatgpt.com/?q=${encodeURIComponent(
+                    textToAskChatGPT
+                  )}`,
+                  "_blank"
+                )
+              })
+
+              // Add Copy button with icon
+              const copyButton = document.createElement("button")
+              copyButton.style.cssText =
+                translateButton.style.cssText +
+                `
+                transition: border-color 0.2s ease;
+              `
+              copyButton.addEventListener("mouseover", () => {
+                copyButton.style.borderColor = "#10B981"
+              })
+              copyButton.addEventListener("mouseout", () => {
+                copyButton.style.borderColor = "yellow"
+              })
+
+              fetch(chrome.runtime.getURL("copy-icon.svg"))
+                .then((response) => response.text())
+                .then((svgText) => {
+                  const parser = new DOMParser()
+                  const svgDoc = parser.parseFromString(
+                    svgText,
+                    "image/svg+xml"
+                  )
+                  const svgElement = svgDoc.documentElement
+                  svgElement.setAttribute("height", "18px")
+                  svgElement.setAttribute("width", "18px")
+                  svgElement.setAttribute(
+                    "style",
+                    "transform: translateY(-2px)"
+                  )
+                  svgElement.style.color = "yellow"
+
+                  copyButton.appendChild(svgElement)
+                  const textSpan = document.createElement("span")
+                  textSpan.textContent = "Copy"
+                  textSpan.style.fontSize = "14px"
+                  textSpan.style.fontFamily = "Grandstander"
+                  copyButton.appendChild(textSpan)
+                })
+
+              copyButton.addEventListener("click", () => {
+                navigator.clipboard
+                  .writeText(data.translatedMessage)
+                  .then(() => {
+                    const textSpan = copyButton.querySelector("span")
+                    const originalText = textSpan.textContent
+                    textSpan.textContent = "Copied!"
+                    textSpan.style.color = "oklch(0.765 0.177 163.223)"
+                    setTimeout(() => {
+                      textSpan.textContent = originalText
+                      textSpan.style.color = "yellow"
+                    }, 500)
+                  })
+              })
+
+              buttonContainer.appendChild(moreButton)
+              buttonContainer.appendChild(copyButton)
             } else {
               textContainer.innerHTML = `
                 <div style="color: #ff6666;">Translation failed. Please try again.</div>
@@ -293,6 +415,19 @@ function initSelectionBanner() {
   wrapper.appendChild(modal)
   document.body.appendChild(wrapper)
 
+  // Add keyboard shortcut listener
+  document.addEventListener("keydown", (event) => {
+    if (event.key.toLowerCase() === "t") {
+      const selectedText = window.getSelection()?.toString().trim()
+      if (selectedText) {
+        translateButton.click()
+        event.preventDefault()
+        event.stopPropagation()
+        return false
+      }
+    }
+  })
+
   // Listen for text selection changes
   document.addEventListener("selectionchange", () => {
     const selectedText = window.getSelection()?.toString().trim()
@@ -301,11 +436,18 @@ function initSelectionBanner() {
       // Show modal with selected text
       wrapper.style.display = "flex"
 
-      // Truncate text if too long
+      // Reset banner to initial state
       textContainer.textContent =
         selectedText.length > MAX_TEXT_LENGTH
           ? selectedText.slice(0, MAX_TEXT_LENGTH) + "..."
           : selectedText
+
+      // Reset button container to only show translate button
+      buttonContainer.innerHTML = ""
+      buttonContainer.appendChild(translateButton)
+
+      // Re-enable translate button if it was disabled
+      translateButton.disabled = false
     } else {
       // Hide modal when no text is selected
       wrapper.style.display = "none"
