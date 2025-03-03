@@ -103,14 +103,14 @@ function initSelectionBanner() {
 
       // Add text after the icon
       const textSpan = document.createElement("span")
-      textSpan.textContent = "Translate"
+      textSpan.textContent = "Translate [T]"
       textSpan.style.fontSize = "14px"
       textSpan.style.fontFamily = "Grandstander"
       translateButton.appendChild(textSpan)
     })
     .catch((error) => {
       console.error("Error loading SVG:", error)
-      translateButton.textContent = "Translate" // Fallback to text-only
+      translateButton.textContent = "Translate [T]" // Fallback to text-only
     })
 
   translateButton.addEventListener("click", async () => {
@@ -436,11 +436,18 @@ Thank you and LFG!`
       // Show modal with selected text
       wrapper.style.display = "flex"
 
-      // Truncate text if too long
+      // Reset banner to initial state
       textContainer.textContent =
         selectedText.length > MAX_TEXT_LENGTH
           ? selectedText.slice(0, MAX_TEXT_LENGTH) + "..."
           : selectedText
+
+      // Reset button container to only show translate button
+      buttonContainer.innerHTML = ""
+      buttonContainer.appendChild(translateButton)
+
+      // Re-enable translate button if it was disabled
+      translateButton.disabled = false
     } else {
       // Hide modal when no text is selected
       wrapper.style.display = "none"
