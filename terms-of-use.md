@@ -115,11 +115,10 @@ Lingolin shall not be liable for:
 For questions about these terms:
 
 - Website: https://www.lingolin.xyz
-- Support: [Insert support email]
+- Support: hellolingolin@gmail.com
 
 ## 13. Governing Law
 
-These terms are governed by [Insert Jurisdiction] law, without regard to its
-conflict of law principles.
+These terms are governed by Spain law, without regard to its conflict of law principles.
 
-Last updated: [Current Date]
+Last updated: March 3th, 2025
