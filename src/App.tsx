@@ -21,6 +21,10 @@ function App() {
       const { "lingolin-message": result } = await chrome.storage.sync.get(
         "lingolin-message"
       )
+      if (!result) {
+        setIsLoading(false)
+        return
+      }
       if (result.trim() !== "") {
         const parsedResult = JSON.parse(result)
         console.log("🍎 ->->->-> Local storage received (1)!!!", parsedResult)

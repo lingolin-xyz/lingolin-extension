@@ -50,9 +50,11 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
 
   return (
     <div className="flex flex-col items-center justify-center h-full p-4 gap-4">
-      <BlurryEntranceSuperFast>
-        <Title>Hi, {userSession.email.split("@")[0]}!</Title>
-      </BlurryEntranceSuperFast>
+      {userSession && userSession.email && (
+        <BlurryEntranceSuperFast>
+          <Title>Hi, {userSession.email.split("@")[0]}!</Title>
+        </BlurryEntranceSuperFast>
+      )}
 
       <BlurryEntranceSuperFast delay={0.11}>
         <div className="flex w-[320px] justify-center gap-4 bg-zinc-100 p-3 rounded-xl">
