@@ -116,6 +116,17 @@ function initSelectionBanner() {
   translateButton.addEventListener("click", async () => {
     const selectedText = window.getSelection()?.toString().trim()
     if (selectedText) {
+      // Add length validation
+      if (
+        selectedText.length > 1000 ||
+        selectedText.split(/\s+/).length > 200
+      ) {
+        textContainer.innerHTML = `
+          <div style="color: #ff6666;">The text is too long. Please select a text of maximum 200 words or 1K characters.</div>
+        `
+        return
+      }
+
       const { nativeLanguage, targetLanguage, userData } =
         await readSessionValues()
 
@@ -483,7 +494,7 @@ const readSessionValues = async () => {
     nativeLanguage,
     targetLanguage,
     userData: userData
-      ? JSON.parse(userData).userId
+      ? JSON.parse(userData).id
         ? JSON.parse(userData)
         : false
       : false,
