@@ -161,7 +161,7 @@ function initSelectionBanner() {
 
           try {
             const response = await fetch(
-              "https://lingolin.xyz/api/v1/translate",
+              "https://www.lingolin.xyz/api/v1/translate",
               {
                 method: "POST",
                 headers: {
