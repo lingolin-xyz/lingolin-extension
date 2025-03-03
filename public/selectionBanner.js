@@ -130,11 +130,17 @@ function initSelectionBanner() {
       const { nativeLanguage, targetLanguage, userData } =
         await readSessionValues()
 
-      console.log(" !!! USER DATA", { userData })
-
       if (!userData) {
         textContainer.innerHTML = `
           <div style="color: yellow;">Please <a href="https://www.lingolin.xyz/" target="_blank" style="color: #10B981; text-decoration: underline;">login</a> to use the translation feature</div>
+        `
+        translateButton.disabled = true
+        return
+      }
+
+      if (!nativeLanguage || !targetLanguage) {
+        textContainer.innerHTML = `
+          <div style="color: yellow;">Please select a language in the settings</div>
         `
         translateButton.disabled = true
         return

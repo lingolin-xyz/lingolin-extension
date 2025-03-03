@@ -13,8 +13,8 @@ import { AVALIABLE_LANGUANGES } from "@/lib/constants"
 // import { Button } from "./ui/button"
 
 const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
-  const [targetLanguage, setTargetLanguage] = useState("Spanish")
-  const [nativeLanguage, setNativeLanguage] = useState("English")
+  const [targetLanguage, setTargetLanguage] = useState("")
+  const [nativeLanguage, setNativeLanguage] = useState("")
 
   useEffect(() => {
     if (chrome.storage) {
@@ -62,11 +62,10 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
             <div className="text-xs font-bold">Native language:</div>
             <Select
               value={nativeLanguage}
-              defaultValue="English"
               onValueChange={handleNativeLanguageChange}
             >
               <SelectTrigger className="!bg-white">
-                <SelectValue placeholder="Select a language" />
+                <SelectValue placeholder="Please Select" />
               </SelectTrigger>
               <SelectContent className="max-h-[260px] overflow-y-auto">
                 {AVALIABLE_LANGUANGES.map((language) => (
@@ -85,11 +84,10 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
             <div className="text-xs font-bold">Target language:</div>
             <Select
               value={targetLanguage}
-              defaultValue="English"
               onValueChange={handleTargetLanguageChange}
             >
               <SelectTrigger className="!bg-white">
-                <SelectValue placeholder="Select a language" />
+                <SelectValue placeholder="Please Select" />
               </SelectTrigger>
               <SelectContent className="max-h-[260px] overflow-y-auto">
                 {AVALIABLE_LANGUANGES.map((language) => (

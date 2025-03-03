@@ -31,8 +31,8 @@ function App() {
           // now ideally we should get: credit_balance and game_tier ... let's do that from the backend!!
 
           await axios.post(
-            // "https://www.lingolin.xyz/api/v1/get-session",
-            "http://localhost:3000/api/v1/get-session",
+            "https://www.lingolin.xyz/api/v1/get-session",
+            // "http://localhost:3000/api/v1/get-session",
             {
               userId: parsedResult.id,
             }
