@@ -10,6 +10,8 @@ import {
 import BlurryEntranceSuperFast from "./BlurryEntranceSuperFast"
 import { AVALIABLE_LANGUANGES } from "@/lib/constants"
 import BlurryEntrance from "./BlurryEntrance"
+import { Button } from "./ui/button"
+import { LayoutDashboard, FileText, Shield, MessageSquare } from "lucide-react"
 
 const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
   const [targetLanguage, setTargetLanguage] = useState("")
@@ -103,7 +105,7 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
       </BlurryEntranceSuperFast>
 
       <BlurryEntranceSuperFast delay={0.15}>
-        <div className="flex items-center justify-center gap-3">
+        <div className="flex items-center justify-center gap-3 h-28">
           <BlurryEntrance delay={0.18}>
             <img
               src="https://javitoshi.com/images/lingolin.png"
@@ -111,13 +113,63 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
               className="w-14 h-14"
             />
           </BlurryEntrance>
-          <BlurryEntrance delay={0.28}>
-            {userSession && userSession.email && (
-              <div className="font-semibold text-xl">
-                Hi, {userSession.email.split("@")[0]}!
-              </div>
-            )}
-          </BlurryEntrance>
+          <div className="">
+            <BlurryEntrance delay={0.28}>
+              {userSession && userSession.email && (
+                <div className="font-semibold text-xl">
+                  Hi, {userSession.email.split("@")[0]}!
+                </div>
+              )}
+            </BlurryEntrance>
+          </div>
+        </div>
+      </BlurryEntranceSuperFast>
+
+      <BlurryEntranceSuperFast delay={0.22}>
+        <div className="flex flex-wrap gap-2.5 justify-center items-center">
+          <a
+            href="https://lingolin.xyz/dashboard"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Button variant="outline2">
+              <LayoutDashboard className="w-4 h-4" />
+              Dashboard
+            </Button>
+          </a>
+
+          <a
+            href="https://x.com/hellolingolin"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Button variant="outline2">
+              <MessageSquare className="w-4 h-4" />
+              Feedback
+            </Button>
+          </a>
+
+          <a
+            href="https://lingolin.xyz/terms-of-use"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Button variant="outline2">
+              <FileText className="w-4 h-4" />
+              Terms of Use
+            </Button>
+          </a>
+
+          <a
+            href="https://lingolin.xyz/privacy-policy"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Button variant="outline2">
+              <Shield className="w-4 h-4" />
+              Privacy Policy
+            </Button>
+          </a>
         </div>
       </BlurryEntranceSuperFast>
 
