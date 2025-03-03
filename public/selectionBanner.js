@@ -116,6 +116,30 @@ function initSelectionBanner() {
   translateButton.addEventListener("click", async () => {
     const selectedText = window.getSelection()?.toString().trim()
     if (selectedText) {
+      // Add length validation
+      if (
+        selectedText.length > 1000 ||
+        selectedText.split(/\s+/).length > 200
+      ) {
+        textContainer.innerHTML = `
+          <div style="color: #ff6666;">The text is too long. Please select a text of maximum 200 words or 1K characters.</div>
+        `
+        return
+      }
+
+      const { nativeLanguage, targetLanguage, userData } =
+        await readSessionValues()
+
+      console.log(" !!! USER DATA", { userData })
+
+      if (!userData) {
+        textContainer.innerHTML = `
+          <div style="color: yellow;">Please <a href="https://www.lingolin.xyz/" target="_blank" style="color: #10B981; text-decoration: underline;">login</a> to use the translation feature</div>
+        `
+        translateButton.disabled = true
+        return
+      }
+
       // Save the original button content
       const originalButtonContent = translateButton.innerHTML
 
@@ -148,9 +172,6 @@ function initSelectionBanner() {
           textSpan.style.fontFamily = "Grandstander"
           textSpan.style.marginLeft = "5px"
           translateButton.appendChild(textSpan)
-
-          const { nativeLanguage, targetLanguage, userData } =
-            await readSessionValues()
 
           try {
             const response = await fetch(
@@ -472,6 +493,10 @@ const readSessionValues = async () => {
   return {
     nativeLanguage,
     targetLanguage,
-    userData: userData ? JSON.parse(userData) : false,
+    userData: userData
+      ? JSON.parse(userData).id
+        ? JSON.parse(userData)
+        : false
+      : false,
   }
 }

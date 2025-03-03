@@ -21,3 +21,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# ignore all .zip files on the root level: 
+*.zip
