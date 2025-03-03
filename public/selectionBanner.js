@@ -191,7 +191,17 @@ function initSelectionBanner() {
 
               // Add More button
               const moreButton = document.createElement("button")
-              moreButton.style.cssText = translateButton.style.cssText
+              moreButton.style.cssText =
+                translateButton.style.cssText +
+                `
+                transition: border-color 0.2s ease;
+              `
+              moreButton.addEventListener("mouseover", () => {
+                moreButton.style.borderColor = "#10B981"
+              })
+              moreButton.addEventListener("mouseout", () => {
+                moreButton.style.borderColor = "yellow"
+              })
 
               fetch(chrome.runtime.getURL("openai-icon.svg"))
                 .then((response) => response.text())
@@ -243,7 +253,17 @@ Thank you and LFG!`
 
               // Add Copy button with icon
               const copyButton = document.createElement("button")
-              copyButton.style.cssText = translateButton.style.cssText
+              copyButton.style.cssText =
+                translateButton.style.cssText +
+                `
+                transition: border-color 0.2s ease;
+              `
+              copyButton.addEventListener("mouseover", () => {
+                copyButton.style.borderColor = "#10B981"
+              })
+              copyButton.addEventListener("mouseout", () => {
+                copyButton.style.borderColor = "yellow"
+              })
 
               fetch(chrome.runtime.getURL("copy-icon.svg"))
                 .then((response) => response.text())
