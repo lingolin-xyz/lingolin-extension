@@ -27,7 +27,6 @@ function App() {
       }
       if (result.trim() !== "") {
         const parsedResult = JSON.parse(result)
-        console.log("🍎 ->->->-> Local storage received (1)!!!", parsedResult)
         if (parsedResult && parsedResult.id) {
           // now ideally we should get: credit_balance and game_tier ... let's do that from the backend!!
 
@@ -38,7 +37,6 @@ function App() {
               userId: parsedResult.id,
             }
           )
-          console.log("🍎 ->->->-> Session info: ", res.data)
 
           setUserSession({
             ...parsedResult,

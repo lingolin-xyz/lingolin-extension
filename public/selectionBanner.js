@@ -152,13 +152,6 @@ function initSelectionBanner() {
           const { nativeLanguage, targetLanguage, userData } =
             await readSessionValues()
 
-          console.log("THE VALUE OF USER DATA", userData)
-          console.log("THE VALUE OF NATIVE LANGUAGE", nativeLanguage)
-          console.log("THE VALUE OF TARGET LANGUAGE", targetLanguage)
-          console.log("THE VALUE OF SELECTED TEXT", selectedText)
-
-          console.log(" CALLING V1 TRANSLATION API...")
-
           try {
             const response = await fetch(
               "https://www.lingolin.xyz/api/v1/translate",
@@ -177,8 +170,6 @@ function initSelectionBanner() {
             )
 
             const data = await response.json()
-
-            console.log(" CAME BACK FRON TRANSLATION API CALL!! LFG", data)
 
             if (data.translatedMessage) {
               textContainer.innerHTML = `
@@ -464,8 +455,6 @@ Thank you and LFG!`
     }
   })
 }
-
-console.log("hello from selection banner!!! 💛 💛 💛 💛 ")
 
 initSelectionBanner()
 
