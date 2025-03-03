@@ -1,3 +1,5 @@
+export const USE_PROD = true
+
 export const PRIVY_APP_ID = "cm7kput8203rjqfjfh7qhsnj6"
 
 export const AVALIABLE_LANGUANGES = [

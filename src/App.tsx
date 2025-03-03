@@ -4,6 +4,7 @@ import NeedToSignIn from "./components/NeedToSignIn"
 import LoadingScreen from "./components/LoadingScreen"
 import LoggedInScreen from "./components/LoggedInScreen"
 import { UserSession } from "./lib/types"
+import { USE_PROD } from "./lib/constants"
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -31,8 +32,9 @@ function App() {
           // now ideally we should get: credit_balance and game_tier ... let's do that from the backend!!
 
           await axios.post(
-            "https://www.lingolin.xyz/api/v1/get-session",
-            // "http://localhost:3000/api/v1/get-session",
+            USE_PROD
+              ? "https://www.lingolin.xyz/api/v1/get-session"
+              : "http://localhost:3000/api/v1/get-session",
             {
               userId: parsedResult.id,
             }
