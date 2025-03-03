@@ -22428,17 +22428,17 @@
 		{
 			"id": "pointer:pointer",
 			"typeName": "pointer",
-			"x": 1629.881351737147,
-			"y": 5332.19395326842,
-			"lastActivityTimestamp": 1740937374256,
+			"x": 1778.5863703673797,
+			"y": 5220.746244494406,
+			"lastActivityTimestamp": 1740937483671,
 			"meta": {}
 		},
 		{
 			"followingUserId": null,
 			"opacityForNextShape": 1,
 			"stylesForNextShape": {
-				"tldraw:color": "light-red",
-				"tldraw:font": "mono",
+				"tldraw:color": "light-blue",
+				"tldraw:font": "draw",
 				"tldraw:textAlign": "start",
 				"tldraw:size": "s"
 			},
@@ -22487,9 +22487,9 @@
 			"editingShapeId": null,
 			"croppingShapeId": null,
 			"selectedShapeIds": [
-				"shape:l9EZCC4EmoUwj0_0TIR2v"
+				"shape:kYavW6ozCHozUqZOM7sN9"
 			],
-			"hoveredShapeId": "shape:-QRDjx05QlF2vKaOPzdsr",
+			"hoveredShapeId": null,
 			"erasingShapeIds": [],
 			"hintingShapeIds": [],
 			"focusedGroupId": null,
@@ -22700,6 +22700,29 @@
 			},
 			"parentId": "page:page",
 			"index": "b2A7eW",
+			"typeName": "shape"
+		},
+		{
+			"x": 1730.753562245881,
+			"y": 5243.476384727877,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:kYavW6ozCHozUqZOM7sN9",
+			"type": "text",
+			"props": {
+				"color": "light-blue",
+				"size": "s",
+				"w": 196.9895782470703,
+				"text": "could be cached too!!",
+				"font": "draw",
+				"textAlign": "start",
+				"autoSize": true,
+				"scale": 0.5504096951458822
+			},
+			"parentId": "page:page",
+			"index": "b2C16j",
 			"typeName": "shape"
 		}
 	]
