@@ -204,7 +204,14 @@ function initSelectionBanner() {
 
             if (data.translatedMessage) {
               textContainer.innerHTML = `
-                    <div style="font-size: 16px; color: #cccccc; margin-bottom: 8px;">Translation in ${data.targetLanguage}:</div>
+                    <div style="font-size: 19px; color: yellow; font-style: italic; margin-bottom: 2px;">${
+                      selectedText.length > 100
+                        ? selectedText.slice(0, 100) + "..."
+                        : selectedText
+                    }</div>
+                    <div style="font-size: 14px; color: #cccccc; margin-bottom: 8px;">Translation in ${
+                      data.targetLanguage
+                    }</div>
                     <div>${data.translatedMessage}</div>
                   `
 
