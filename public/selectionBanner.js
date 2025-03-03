@@ -157,46 +157,51 @@ function initSelectionBanner() {
           console.log("THE VALUE OF TARGET LANGUAGE", targetLanguage)
           console.log("THE VALUE OF SELECTED TEXT", selectedText)
 
-          // console.log("THE VALUE OF LOGGED_IN_USER_ID", LOGGED_IN_USER_ID)
+          console.log(" CALLING V1 TRANSLATION API...")
 
-          // try {
-          //   const response = await fetch(
-          //     "http://localhost:3000/api/translate",
-          //     {
-          //       method: "POST",
-          //       headers: {
-          //         "Content-Type": "application/json",
-          //       },
-          //       body: JSON.stringify({
-          //         userId: LOGGED_IN_USER_ID,
-          //         text: selectedText,
-          //       }),
-          //     }
-          //   )
+          try {
+            const response = await fetch(
+              "http://localhost:3000/api/v1/translate",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  userId: userData.id,
+                  text: selectedText,
+                  nativeLanguage: nativeLanguage,
+                  targetLanguage: targetLanguage,
+                }),
+              }
+            )
 
-          //   const data = await response.json()
-          //   if (data.translatedText) {
-          //     textContainer.innerHTML = `
-          //           <div style="font-size: 16px; color: #cccccc; margin-bottom: 8px;">Translation:</div>
-          //           <div>${data.translatedText}</div>
-          //         `
-          //   } else {
-          //     textContainer.innerHTML = `
-          //       <div style="color: #ff6666;">Translation failed. Please try again.</div>
-          //       <div style="font-size: 18px; margin-top: 8px;">${selectedText}</div>
-          //     `
-          //   }
-          // } catch (error) {
-          //   console.error("Translation error:", error)
-          //   textContainer.innerHTML = `
-          //     <div style="color: #ff6666;">Translation failed. Please try again.</div>
-          //     <div style="font-size: 18px; margin-top: 8px;">${selectedText}</div>
-          //   `
-          // } finally {
-          //   // This code always runs, whether there was an error or not
-          //   translateButton.innerHTML = originalButtonContent
-          //   translateButton.disabled = false
-          // }
+            const data = await response.json()
+
+            console.log(" CAME BACK FRON TRANSLATION API CALL!! LFG", data)
+
+            if (data.translatedMessage) {
+              textContainer.innerHTML = `
+                    <div style="font-size: 16px; color: #cccccc; margin-bottom: 8px;">Translation in ${data.targetLanguage}:</div>
+                    <div>${data.translatedMessage}</div>
+                  `
+            } else {
+              textContainer.innerHTML = `
+                <div style="color: #ff6666;">Translation failed. Please try again.</div>
+                <div style="font-size: 18px; margin-top: 8px;">${selectedText}</div>
+              `
+            }
+          } catch (error) {
+            console.error("Translation error:", error)
+            textContainer.innerHTML = `
+              <div style="color: #ff6666;">Translation failed. Please try again.</div>
+              <div style="font-size: 18px; margin-top: 8px;">${selectedText}</div>
+            `
+          } finally {
+            // This code always runs, whether there was an error or not
+            translateButton.innerHTML = originalButtonContent
+            translateButton.disabled = false
+          }
         })
         .catch((error) => {
           console.error("Error loading spinner SVG:", error)
@@ -228,57 +233,57 @@ function initSelectionBanner() {
   `
 
   // Create and add the SVG icon
-  fetch(chrome.runtime.getURL("copy-icon.svg"))
-    .then((response) => response.text())
-    .then((svgText) => {
-      const parser = new DOMParser()
-      const svgDoc = parser.parseFromString(svgText, "image/svg+xml")
-      const svgElement = svgDoc.documentElement
+  // fetch(chrome.runtime.getURL("copy-icon.svg"))
+  //   .then((response) => response.text())
+  //   .then((svgText) => {
+  //     const parser = new DOMParser()
+  //     const svgDoc = parser.parseFromString(svgText, "image/svg+xml")
+  //     const svgElement = svgDoc.documentElement
 
-      // Adjust SVG size
-      svgElement.setAttribute("height", "18px")
-      svgElement.setAttribute("width", "18px")
-      svgElement.setAttribute("style", "transform: translateY(-2px)")
+  //     // Adjust SVG size
+  //     svgElement.setAttribute("height", "18px")
+  //     svgElement.setAttribute("width", "18px")
+  //     svgElement.setAttribute("style", "transform: translateY(-2px)")
 
-      // Set SVG color to match button text
-      svgElement.style.color = "yellow"
+  //     // Set SVG color to match button text
+  //     svgElement.style.color = "yellow"
 
-      copyButton.appendChild(svgElement)
+  //     copyButton.appendChild(svgElement)
 
-      // Add text after the icon
-      const textSpan = document.createElement("span")
-      textSpan.textContent = "Copy to Clipboard"
-      textSpan.style.fontSize = "14px"
-      textSpan.style.fontFamily = "Grandstander"
-      copyButton.appendChild(textSpan)
+  //     // Add text after the icon
+  //     const textSpan = document.createElement("span")
+  //     textSpan.textContent = "Copy to Clipboard"
+  //     textSpan.style.fontSize = "14px"
+  //     textSpan.style.fontFamily = "Grandstander"
+  //     copyButton.appendChild(textSpan)
 
-      copyButton.addEventListener("click", () => {
-        const selectedText = window.getSelection()?.toString().trim()
-        if (selectedText) {
-          navigator.clipboard
-            .writeText(selectedText)
-            .then(() => {
-              const originalText = textSpan.textContent
-              textSpan.textContent = "Copied!"
-              textSpan.style.fontFamily = "Grandstander"
-              textSpan.style.color = "oklch(0.765 0.177 163.223)"
-              setTimeout(() => {
-                textSpan.textContent = originalText
-                textSpan.style.color = "yellow"
-              }, 500)
-            })
-            .catch((err) => console.error("Failed to copy:", err))
-        }
-      })
-    })
-    .catch((error) => {
-      console.error("Error loading SVG:", error)
-      copyButton.textContent = "Copy to Clipboard fallback" // Fallback to text-only
-    })
+  //     copyButton.addEventListener("click", () => {
+  //       const selectedText = window.getSelection()?.toString().trim()
+  //       if (selectedText) {
+  //         navigator.clipboard
+  //           .writeText(selectedText)
+  //           .then(() => {
+  //             const originalText = textSpan.textContent
+  //             textSpan.textContent = "Copied!"
+  //             textSpan.style.fontFamily = "Grandstander"
+  //             textSpan.style.color = "oklch(0.765 0.177 163.223)"
+  //             setTimeout(() => {
+  //               textSpan.textContent = originalText
+  //               textSpan.style.color = "yellow"
+  //             }, 500)
+  //           })
+  //           .catch((err) => console.error("Failed to copy:", err))
+  //       }
+  //     })
+  //   })
+  //   .catch((error) => {
+  //     console.error("Error loading SVG:", error)
+  //     copyButton.textContent = "Copy to Clipboard fallback" // Fallback to text-only
+  //   })
 
   // Add buttons to button container
   buttonContainer.appendChild(translateButton)
-  buttonContainer.appendChild(copyButton)
+  // buttonContainer.appendChild(copyButton)
 
   // Add containers to modal
   modal.appendChild(textContainer)
