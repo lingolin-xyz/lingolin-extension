@@ -105,7 +105,7 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
         </div>
       </BlurryEntranceSuperFast>
 
-      <BlurryEntranceSuperFast delay={0.22}>
+      {/* <BlurryEntranceSuperFast delay={0.22}>
         <div className="flex flex-col items-center justify-center">
           <div className="relative flex flex-col items-center justify-center pb-1.5">
             <div className="text-5xl font-bold text-shadow-like-border2 text-yellow-300">
@@ -114,7 +114,7 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
             <div className="text-sm font-bold absolute bottom-0">Credits</div>
           </div>
         </div>
-      </BlurryEntranceSuperFast>
+      </BlurryEntranceSuperFast> */}
     </div>
   )
 }
