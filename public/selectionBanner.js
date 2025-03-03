@@ -122,7 +122,11 @@ function initSelectionBanner() {
       console.log(" !!! USER DATA", { userData })
 
       if (!userData) {
-        alert("No user session, please log in")
+        textContainer.innerHTML = `
+          <div style="color: yellow;">Please <a href="https://www.lingolin.xyz/" target="_blank" style="color: #10B981; text-decoration: underline;">login</a> to use the translation feature</div>
+        `
+        translateButton.disabled = true
+        return
       }
 
       // Save the original button content
