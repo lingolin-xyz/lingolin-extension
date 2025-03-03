@@ -20,7 +20,12 @@
   "permissions": ["storage", "activeTab"],
   "web_accessible_resources": [
     {
-      "resources": ["translate-icon.svg", "copy-icon.svg", "spinner-icon.svg"],
+      "resources": [
+        "translate-icon.svg",
+        "copy-icon.svg",
+        "spinner-icon.svg",
+        "openai-icon.svg"
+      ],
       "matches": ["<all_urls>"]
     }
   ],

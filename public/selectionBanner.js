@@ -192,11 +192,35 @@ function initSelectionBanner() {
               // Add More button
               const moreButton = document.createElement("button")
               moreButton.style.cssText = translateButton.style.cssText
-              moreButton.innerHTML =
-                '<span style="font-size: 14px; font-family: Grandstander">More</span>'
+
+              fetch(chrome.runtime.getURL("openai-icon.svg"))
+                .then((response) => response.text())
+                .then((svgText) => {
+                  const parser = new DOMParser()
+                  const svgDoc = parser.parseFromString(
+                    svgText,
+                    "image/svg+xml"
+                  )
+                  const svgElement = svgDoc.documentElement
+                  svgElement.setAttribute("height", "18px")
+                  svgElement.setAttribute("width", "18px")
+                  svgElement.setAttribute(
+                    "style",
+                    "transform: translateY(-2px)"
+                  )
+                  svgElement.style.color = "yellow"
+
+                  moreButton.appendChild(svgElement)
+                  const textSpan = document.createElement("span")
+                  textSpan.textContent = "More"
+                  textSpan.style.fontSize = "14px"
+                  textSpan.style.fontFamily = "Grandstander"
+                  moreButton.appendChild(textSpan)
+                })
+
               moreButton.addEventListener("click", () => {
                 // TODO: Add your external website URL here
-                const textToAskChatGPT = `Please explain to me this translation. I am learning ${data.targetLanguage} and i am from ${data.nativeLanguage}).
+                const textToAskChatGPT = `Please explain to me this translation. I am learning ${data.targetLanguage} and my native language is ${nativeLanguage}).
                 
 <TextISelectedToTranslate>
 ${selectedText}
@@ -206,7 +230,9 @@ ${selectedText}
 ${data.translatedMessage}
 </TranslationOutput>
 
-Please explain to me the key parts of the translation. Thank you and LFG!`
+Please explain to me the key parts of the translation. Explain it to me in **${nativeLanguage}** because that's my native language.
+
+Thank you and LFG!`
                 window.open(
                   `https://chatgpt.com/?q=${encodeURIComponent(
                     textToAskChatGPT
