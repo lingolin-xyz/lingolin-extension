@@ -395,6 +395,19 @@ Thank you and LFG!`
   wrapper.appendChild(modal)
   document.body.appendChild(wrapper)
 
+  // Add keyboard shortcut listener
+  document.addEventListener("keydown", (event) => {
+    if (event.key.toLowerCase() === "t") {
+      const selectedText = window.getSelection()?.toString().trim()
+      if (selectedText) {
+        translateButton.click()
+        event.preventDefault()
+        event.stopPropagation()
+        return false
+      }
+    }
+  })
+
   // Listen for text selection changes
   document.addEventListener("selectionchange", () => {
     const selectedText = window.getSelection()?.toString().trim()
