@@ -164,10 +164,22 @@ function initSelectionBanner() {
           const svgDoc = parser.parseFromString(svgText, "image/svg+xml")
           const svgElement = svgDoc.documentElement
 
-          // Adjust SVG size and color
           svgElement.setAttribute("height", "18px")
           svgElement.setAttribute("width", "18px")
           svgElement.style.color = "yellow"
+          svgElement.style.animation = "spin 1s linear infinite"
+
+          if (!document.querySelector("#spinner-keyframes")) {
+            const style = document.createElement("style")
+            style.id = "spinner-keyframes"
+            style.textContent = `
+              @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+              }
+            `
+            document.head.appendChild(style)
+          }
 
           // Clear the temporary loading text and add the spinner
           translateButton.innerHTML = ""
