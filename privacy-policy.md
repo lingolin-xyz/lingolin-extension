@@ -1,6 +1,6 @@
 # Privacy Policy for Lingolin Chrome Extension
 
-Last updated: March 3th, 2025
+Last updated: March 3rd, 2025
 
 ## 1. Introduction
 
@@ -10,24 +10,20 @@ safeguard your information when you use our browser extension.
 
 ## 2. Information We Collect
 
-### 2.1 User-Provided Information
-
-- User account information (when you log in through lingolin.xyz)
+- User account information (when you log in through lingolin.xyz, you can use
+  email or Google as sign-in methods, and we'll store your email address and
+  also your name but the name is only if you used the Google Sign-In method)
 - Language preferences (native and target languages)
-- Selected text for translation
-
-### 2.2 Automatically Collected Information
-
-- Browser type and version
-- Extension interaction data
-- Technical information necessary for the extension's functionality
+- The translations you generate using the extension, so you can revisit them
+  (and letting you delete your records at any time)
 
 ## 3. How We Use Your Information
 
 We use the collected information for:
 
 - Providing translation services
-- Personalizing your experience
+- Personalizing your experience, hoping to help learn you faster, better and
+  easier
 - Improving our services
 - Maintaining and optimizing the extension's functionality
 
@@ -40,8 +36,10 @@ We use the collected information for:
 
 ### 4.2 Server Storage
 
-- Translation requests are processed through lingolin.xyz
-- User account information is stored on our secure servers
+- Translation requests are processed through lingolin.xyz's API service, hosted
+  on Vercel
+- User account information is stored on our secure servers, using Nillion's
+  secure database services
 
 ## 5. Data Sharing and Transfer
 
@@ -75,6 +73,7 @@ Our extension integrates with:
 
 - Lingolin.xyz for account management and translation services
 - Google Fonts for UI enhancement
+- Google's Firebase Authentication system though Privy.io's service
 - ChatGPT for additional translation explanations (optional feature)
 
 ## 9. Children's Privacy
@@ -84,7 +83,9 @@ collect information from children under 13.
 
 ## 10. Changes to This Policy
 
-We may update this Privacy Policy from time to time. When we make changes, we will inform you through our website or the extension. By continuing to use our extension after these changes, you agree to be bound by the updated policy.
+We may update this Privacy Policy from time to time. When we make changes, we
+will inform you through our website or the extension. By continuing to use our
+extension after these changes, you agree to be bound by the updated policy.
 
 ## 11. Data Retention
 
@@ -105,7 +106,3 @@ For privacy-related questions or concerns, contact us at:
 
 By using the Extension, you consent to this Privacy Policy and our data
 practices as described above.
-
-## 14. Jurisdiction
-
-This policy is governed by Spain law. Any disputes will be resolved in the courts of Spain.

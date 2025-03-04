@@ -271,7 +271,7 @@ function initSelectionBanner() {
 
               moreButton.addEventListener("click", () => {
                 // TODO: Add your external website URL here
-                const textToAskChatGPT = `Please explain to me this translation. I am learning ${data.targetLanguage} and my native language is ${nativeLanguage}).
+                const textToAskChatGPT = `Please explain to me this translation. I am learning ${targetLanguage} and my native language is ${nativeLanguage}).
                 
 <TextISelectedToTranslate>
 ${selectedText}
