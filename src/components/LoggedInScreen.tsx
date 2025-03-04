@@ -105,7 +105,7 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
       </BlurryEntranceSuperFast>
 
       <BlurryEntranceSuperFast delay={0.15}>
-        <div className="flex items-center justify-center gap-3 h-28">
+        <div className="flex items-center justify-center gap-3 h-24">
           <BlurryEntrance delay={0.18}>
             <img
               src="https://javitoshi.com/images/lingolin.png"
@@ -127,11 +127,7 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
 
       <BlurryEntranceSuperFast delay={0.22}>
         <div className="flex flex-wrap gap-2.5 justify-center items-center">
-          <a
-            href="https://www.lingolin.xyz/dashboard"
-            target="_blank"
-            rel="noreferrer"
-          >
+          <a href="https://www.lingolin.xyz/" target="_blank" rel="noreferrer">
             <Button variant="outline2">
               <LayoutDashboard className="w-4 h-4" />
               Dashboard
