@@ -383,55 +383,6 @@ Thank you and LFG!`
     gap: 5px;
   `
 
-  // Create and add the SVG icon
-  // fetch(chrome.runtime.getURL("copy-icon.svg"))
-  //   .then((response) => response.text())
-  //   .then((svgText) => {
-  //     const parser = new DOMParser()
-  //     const svgDoc = parser.parseFromString(svgText, "image/svg+xml")
-  //     const svgElement = svgDoc.documentElement
-
-  //     // Adjust SVG size
-  //     svgElement.setAttribute("height", "18px")
-  //     svgElement.setAttribute("width", "18px")
-  //     svgElement.setAttribute("style", "transform: translateY(-2px)")
-
-  //     // Set SVG color to match button text
-  //     svgElement.style.color = "yellow"
-
-  //     copyButton.appendChild(svgElement)
-
-  //     // Add text after the icon
-  //     const textSpan = document.createElement("span")
-  //     textSpan.textContent = "Copy to Clipboard"
-  //     textSpan.style.fontSize = "14px"
-  //     textSpan.style.fontFamily = "Grandstander"
-  //     copyButton.appendChild(textSpan)
-
-  //     copyButton.addEventListener("click", () => {
-  //       const selectedText = window.getSelection()?.toString().trim()
-  //       if (selectedText) {
-  //         navigator.clipboard
-  //           .writeText(selectedText)
-  //           .then(() => {
-  //             const originalText = textSpan.textContent
-  //             textSpan.textContent = "Copied!"
-  //             textSpan.style.fontFamily = "Grandstander"
-  //             textSpan.style.color = "oklch(0.765 0.177 163.223)"
-  //             setTimeout(() => {
-  //               textSpan.textContent = originalText
-  //               textSpan.style.color = "yellow"
-  //             }, 500)
-  //           })
-  //           .catch((err) => console.error("Failed to copy:", err))
-  //       }
-  //     })
-  //   })
-  //   .catch((error) => {
-  //     console.error("Error loading SVG:", error)
-  //     copyButton.textContent = "Copy to Clipboard fallback" // Fallback to text-only
-  //   })
-
   // Add buttons to button container
   buttonContainer.appendChild(translateButton)
   // buttonContainer.appendChild(copyButton)
