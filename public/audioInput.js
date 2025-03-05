@@ -4,8 +4,6 @@ let mediaRecorder = null
 
 document.addEventListener("keydown", async (event) => {
   if (event.shiftKey && event.key === "M") {
-    console.log("DENTRO DE LA COSAAAA")
-
     const { nativeLanguage, targetLanguage, userData } =
       await readSessionValues()
 
@@ -40,13 +38,10 @@ document.addEventListener("keydown", async (event) => {
             formData.append("userId", userData.id)
 
             try {
-              const response = await fetch(
-                "http://localhost:3000/api/v2/audio-in",
-                {
-                  method: "POST",
-                  body: formData,
-                }
-              )
+              const response = await fetch(`${API_URL}/audio-in`, {
+                method: "POST",
+                body: formData,
+              })
 
               const data = await response.json()
               console.log("Audio procesado:", data)
@@ -140,22 +135,9 @@ document.addEventListener("keydown", async (event) => {
               newCircle.style.transform = `scale(${scale})`
             },
             onComplete: () => {
-              console.log("Animación de encendido completada")
+              // console.log("Animación de encendido completada")
             },
           })
-          // Animar la entrada del círculo
-          // springAnimation({
-          //   from: 0,
-          //   to: 1,
-          //   stiffness: 0.3,
-          //   damping: 0.7,
-          //   onUpdate: (value) => {
-          //     newCircle.style.transform = `scale(${value})`
-          //   },
-          //   onComplete: () => {
-          //     isAnimatingRecordingIndicator = false
-          //   },
-          // })
 
           const img = document.createElement("img")
           img.src = "https://javitoshi.com/images/red-lp.png"
@@ -193,8 +175,6 @@ document.addEventListener("keydown", async (event) => {
             }
           })
 
-          console.log("THIS SHOULD RENDER THE RED LP!!!!!")
-
           newCircle.appendChild(img)
           document.body.appendChild(newCircle)
         })
@@ -218,6 +198,7 @@ document.addEventListener("keydown", async (event) => {
           },
           onComplete: () => {
             recordingIndicator.remove()
+            isAnimatingRecordingIndicator = false
           },
         })
       }
@@ -265,19 +246,19 @@ const putTextWithSpearkerButton = ({ theTranslation, panelToPlaceIt }) => {
 
   speakerButton.addEventListener("click", async () => {
     try {
+      const { targetLanguage, userData } = await readSessionValues()
+
       speakerImg.style.animation = "lingolinSpin 2s linear infinite"
 
-      const response = await fetch(
-        "https://infinitoor.vercel.app/api/text-to-speech",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            message: theTranslation,
-            language: langFromStorage,
-          }),
-        }
-      )
+      const response = await fetch(`${API_URL}/text-to-speech`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: theTranslation,
+          language: targetLanguage,
+          userId: userData.id,
+        }),
+      })
 
       const data = await response.json()
 
