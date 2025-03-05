@@ -31,7 +31,7 @@ function App() {
         if (parsedResult && parsedResult.id) {
           // now ideally we should get: credit_balance and game_tier ... let's do that from the backend!!
 
-          await axios.post(
+          const res = await axios.post(
             USE_PROD
               ? "https://www.lingolin.xyz/api/v1/get-session"
               : "http://localhost:3000/api/v1/get-session",
@@ -40,9 +40,12 @@ function App() {
             }
           )
 
+          console.log("Came from get-session....")
+          console.log(res.data)
+
           setUserSession({
             ...parsedResult,
-            // credit_balance: res.data.credits,
+            credit_balance: res.data.credits,
           })
           setIsLoading(false)
         } else {

@@ -1,4 +1,4 @@
-export const USE_PROD = true
+export const USE_PROD = false
 
 export const PRIVY_APP_ID = "cm7kput8203rjqfjfh7qhsnj6"
 

@@ -1,4 +1,4 @@
-const USE_PROD = true
+const USE_PROD = false
 
 // Maximum text length for display
 const MAX_TEXT_LENGTH = 144

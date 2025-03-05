@@ -105,7 +105,26 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
       </BlurryEntranceSuperFast>
 
       <BlurryEntranceSuperFast delay={0.15}>
-        <div className="flex items-center justify-center gap-3 h-24">
+        <div className="flex items-center justify-center gap-8 h-24">
+          <div className="translate-y-1">
+            <div className="flex flex-col items-center justify-center">
+              <div className="relative flex flex-col items-center justify-center pb-1.5">
+                <div className="text-5xl font-bold text-shadow-like-border2 text-yellow-300">
+                  {userSession.credit_balance}
+                </div>
+                <div className="text-sm font-bold absolute bottom-0">
+                  Credits
+                </div>
+              </div>
+            </div>
+            {/* <BlurryEntrance delay={0.28}>
+              {userSession && userSession.email && (
+                <div className="font-semibold text-xl">
+                  Hi, {userSession.email.split("@")[0]}!
+                </div>
+              )}
+            </BlurryEntrance> */}
+          </div>
           <BlurryEntrance delay={0.18}>
             <img
               src="https://javitoshi.com/images/lingolin.png"
@@ -113,15 +132,6 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
               className="w-14 h-14"
             />
           </BlurryEntrance>
-          <div className="">
-            <BlurryEntrance delay={0.28}>
-              {userSession && userSession.email && (
-                <div className="font-semibold text-xl">
-                  Hi, {userSession.email.split("@")[0]}!
-                </div>
-              )}
-            </BlurryEntrance>
-          </div>
         </div>
       </BlurryEntranceSuperFast>
 
@@ -168,17 +178,6 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
           </a>
         </div>
       </BlurryEntranceSuperFast>
-
-      {/* <BlurryEntranceSuperFast delay={0.22}>
-        <div className="flex flex-col items-center justify-center">
-          <div className="relative flex flex-col items-center justify-center pb-1.5">
-            <div className="text-5xl font-bold text-shadow-like-border2 text-yellow-300">
-              {userSession.credit_balance}
-            </div>
-            <div className="text-sm font-bold absolute bottom-0">Credits</div>
-          </div>
-        </div>
-      </BlurryEntranceSuperFast> */}
     </div>
   )
 }
