@@ -10,7 +10,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js", "selectionBanner.js"],
+      "js": ["content.js", "selectionBanner.js", "audioInput.js"],
       "type": "module"
     }
   ],
