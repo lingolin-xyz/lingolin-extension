@@ -130,7 +130,32 @@ document.addEventListener("keydown", async (event) => {
           newCircle.style.alignItems = "center"
           newCircle.style.justifyContent = "center"
           newCircle.id = "recording-indicator"
-          newCircle.style.transform = "scale(0)"
+
+          springAnimation({
+            from: 0,
+            to: 1,
+            stiffness: 0.2,
+            damping: 0.8,
+            onUpdate: (scale) => {
+              newCircle.style.transform = `scale(${scale})`
+            },
+            onComplete: () => {
+              console.log("Animación de encendido completada")
+            },
+          })
+          // Animar la entrada del círculo
+          // springAnimation({
+          //   from: 0,
+          //   to: 1,
+          //   stiffness: 0.3,
+          //   damping: 0.7,
+          //   onUpdate: (value) => {
+          //     newCircle.style.transform = `scale(${value})`
+          //   },
+          //   onComplete: () => {
+          //     isAnimatingRecordingIndicator = false
+          //   },
+          // })
 
           const img = document.createElement("img")
           img.src = "https://javitoshi.com/images/red-lp.png"
@@ -140,19 +165,35 @@ document.addEventListener("keydown", async (event) => {
           img.style.animation = "lingolinSpin 4s linear infinite"
           img.style.cursor = "pointer"
 
-          // Click to stop recording
+          // Modificar el evento click para animar la salida
           img.addEventListener("click", () => {
             if (isRecording) {
               isRecording = false
-              if (mediaRecorder && mediaRecorder.state === "recording") {
-                mediaRecorder.stop()
-                mediaRecorder.stream
-                  .getTracks()
-                  .forEach((track) => track.stop())
-                mediaRecorder = null
-              }
+
+              // Animar la salida del círculo
+              springAnimation({
+                from: 1,
+                to: 0,
+                stiffness: 0.3,
+                damping: 0.7,
+                onUpdate: (value) => {
+                  newCircle.style.transform = `scale(${value})`
+                },
+                onComplete: () => {
+                  newCircle.remove()
+                  if (mediaRecorder && mediaRecorder.state === "recording") {
+                    mediaRecorder.stop()
+                    mediaRecorder.stream
+                      .getTracks()
+                      .forEach((track) => track.stop())
+                    mediaRecorder = null
+                  }
+                },
+              })
             }
           })
+
+          console.log("THIS SHOULD RENDER THE RED LP!!!!!")
 
           newCircle.appendChild(img)
           document.body.appendChild(newCircle)
@@ -165,6 +206,21 @@ document.addEventListener("keydown", async (event) => {
     } else if (isRecording) {
       // Stop recording
       isRecording = false
+      const recordingIndicator = document.getElementById("recording-indicator")
+      if (recordingIndicator) {
+        springAnimation({
+          from: 1,
+          to: 0,
+          stiffness: 0.3,
+          damping: 0.7,
+          onUpdate: (value) => {
+            recordingIndicator.style.transform = `scale(${value})`
+          },
+          onComplete: () => {
+            recordingIndicator.remove()
+          },
+        })
+      }
       if (mediaRecorder && mediaRecorder.state === "recording") {
         mediaRecorder.stop()
         mediaRecorder.stream.getTracks().forEach((track) => track.stop())
@@ -247,4 +303,33 @@ const putTextWithSpearkerButton = ({ theTranslation, panelToPlaceIt }) => {
   container.appendChild(speakerButton)
   panelToPlaceIt.textContent = ""
   panelToPlaceIt.appendChild(container)
+}
+
+function springAnimation({
+  from,
+  to,
+  stiffness = 0.2,
+  damping = 0.8,
+  onUpdate,
+  onComplete,
+}) {
+  let current = from
+  let velocity = 0
+
+  function animate() {
+    const force = (to - current) * stiffness
+    velocity = (velocity + force) * damping
+    current += velocity
+
+    onUpdate(current)
+
+    if (Math.abs(to - current) < 0.01 && Math.abs(velocity) < 0.01) {
+      onUpdate(to)
+      if (onComplete) onComplete()
+    } else {
+      requestAnimationFrame(animate)
+    }
+  }
+
+  animate()
 }
