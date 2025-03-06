@@ -3,6 +3,19 @@ let isRecording = false
 let isAnimatingRecordingIndicator = false
 let mediaRecorder = null
 
+// Add the CSS animation for speaker rotation
+if (!document.getElementById("speaker-animation-style")) {
+  const style = document.createElement("style")
+  style.id = "speaker-animation-style"
+  style.textContent = `
+    @keyframes speakerRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  `
+  document.head.appendChild(style)
+}
+
 document.addEventListener("keydown", async (event) => {
   if (event.shiftKey && event.key === "M") {
     const { nativeLanguage, targetLanguage, userData } =
@@ -249,7 +262,8 @@ const putTextWithSpearkerButton = ({ theTranslation, panelToPlaceIt }) => {
     try {
       const { targetLanguage, userData } = await readSessionValues()
 
-      speakerImg.style.animation = "lingolinSpin 2s linear infinite"
+      // Add rotation animation while processing
+      speakerImg.style.animation = "speakerRotate 2s linear infinite"
 
       const response = await fetch(`${API_URL}/text-to-speech`, {
         method: "POST",
@@ -263,6 +277,7 @@ const putTextWithSpearkerButton = ({ theTranslation, panelToPlaceIt }) => {
 
       const data = await response.json()
 
+      // Stop the rotation animation
       speakerImg.style.animation = ""
       speakerImg.src =
         "https://javitoshi.com/images/speaker-sticker-playing-2.png"
@@ -372,10 +387,11 @@ const playAudioWithSpinner = async ({ audioUrl, onComplete }) => {
 
     // Reset when audio ends
     audioElement.onended = () => {
-      easeOutAnimation({
+      springAnimation({
         from: 1,
         to: 0,
-        duration: 500,
+        stiffness: 0.3,
+        damping: 0.7,
         onUpdate: (scale) => {
           spinContainer.style.transform = `scale(${scale})`
         },
