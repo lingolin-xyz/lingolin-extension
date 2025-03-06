@@ -224,8 +224,71 @@ function initSelectionBanner() {
                     <div style="font-size: 14px; color: #cccccc; margin-bottom: 8px;">Translation in ${
                       data.targetLanguage
                     }</div>
-                    <div>${data.translatedMessage}</div>
+
+                    <div id="translation-with-speaker" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                      <span style="font-size: 24px;">${
+                        data.translatedMessage
+                      }</span>
+                      <button id="speaker-button" style="background: none; border: none; min-width: 40px; height: 40px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; padding-bottom: 5px;">
+                        <img src="https://javitoshi.com/images/speaker-sticker-2.png" style="width: 100%; height: 100%; object-fit: contain; opacity: 0.75; cursor: pointer;">
+                      </button>
+                    </div>
                   `
+
+              // Add speaker button functionality
+              const speakerButton = document.getElementById("speaker-button")
+              if (speakerButton) {
+                speakerButton.addEventListener("click", async () => {
+                  try {
+                    const { targetLanguage, userData } =
+                      await readSessionValues()
+                    const speakerImg = speakerButton.querySelector("img")
+
+                    // Add rotation animation while processing
+                    speakerImg.style.animation =
+                      "speakerRotate 2s linear infinite"
+
+                    const response = await fetch(
+                      `${
+                        USE_PROD
+                          ? "https://www.lingolin.xyz"
+                          : "http://localhost:3000"
+                      }/api/v2/text-to-speech`,
+                      {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          message: data.translatedMessage,
+                          language: targetLanguage,
+                          userId: userData.id,
+                        }),
+                      }
+                    )
+
+                    const audioData = await response.json()
+
+                    // Stop the rotation animation
+                    speakerImg.style.animation = ""
+                    speakerImg.src =
+                      "https://javitoshi.com/images/speaker-sticker-playing-2.png"
+
+                    await playAudioWithSpinner({
+                      audioUrl: audioData.audio,
+                      onComplete: () => {
+                        speakerImg.style.animation = ""
+                        speakerImg.src =
+                          "https://javitoshi.com/images/speaker-sticker-2.png"
+                      },
+                    })
+                  } catch (error) {
+                    const speakerImg = speakerButton.querySelector("img")
+                    speakerImg.style.animation = ""
+                    speakerImg.src =
+                      "https://javitoshi.com/images/speaker-sticker-2.png"
+                    console.error("Error generating speech:", error)
+                  }
+                })
+              }
 
               // Replace translate button with More and Copy buttons
               buttonContainer.innerHTML = ""
@@ -455,6 +518,145 @@ Thank you and LFG!`
       }
     }
   })
+
+  // Add the CSS animation for speaker rotation if it doesn't exist
+  if (!document.getElementById("speaker-animation-style")) {
+    const style = document.createElement("style")
+    style.id = "speaker-animation-style"
+    style.textContent = `
+      @keyframes speakerRotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      @keyframes lingolinSpin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+    `
+    document.head.appendChild(style)
+  }
+
+  // Add the springAnimation function if it doesn't exist in this file
+  function springAnimation({
+    from,
+    to,
+    stiffness = 0.2,
+    damping = 0.8,
+    onUpdate,
+    onComplete,
+  }) {
+    let current = from
+    let velocity = 0
+
+    function animate() {
+      const force = (to - current) * stiffness
+      velocity = (velocity + force) * damping
+      current += velocity
+
+      onUpdate(current)
+
+      if (Math.abs(to - current) < 0.01 && Math.abs(velocity) < 0.01) {
+        onUpdate(to)
+        if (onComplete) onComplete()
+      } else {
+        requestAnimationFrame(animate)
+      }
+    }
+
+    animate()
+  }
+
+  // Add the playAudioWithSpinner function
+  const playAudioWithSpinner = async ({ audioUrl, onComplete }) => {
+    // Create spinning image container
+    const spinContainer = document.createElement("div")
+    spinContainer.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 100px;
+      height: 100px;
+      z-index: 999999999;
+      transform: scale(0);
+    `
+
+    const spinImg = document.createElement("img")
+    spinImg.src = "https://javitoshi.com/images/yellow-lp.png"
+    spinImg.style.cssText = `
+      width: 80%;
+      height: 80%;
+      object-fit: contain;
+      animation: lingolinSpin 4s linear infinite;
+    `
+
+    spinContainer.appendChild(spinImg)
+    document.body.appendChild(spinContainer)
+
+    // Animate in
+    springAnimation({
+      from: 0,
+      to: 1,
+      stiffness: 0.2,
+      damping: 0.8,
+      onUpdate: (scale) => {
+        spinContainer.style.transform = `scale(${scale})`
+      },
+    })
+
+    // Create and play audio
+    let audioElement = null
+
+    try {
+      audioElement = new Audio(audioUrl)
+
+      // Add error handling for the audio element
+      audioElement.onerror = (e) => {
+        console.error("Audio error:", e)
+        if (document.body.contains(spinContainer)) {
+          document.body.removeChild(spinContainer)
+        }
+        window.open(audioUrl, "_blank")
+      }
+
+      audioElement.play()
+
+      // Reset when audio ends
+      audioElement.onended = () => {
+        springAnimation({
+          from: 1,
+          to: 0,
+          stiffness: 0.3,
+          damping: 0.7,
+          onUpdate: (scale) => {
+            spinContainer.style.transform = `scale(${scale})`
+          },
+          onComplete: () => {
+            if (document.body.contains(spinContainer)) {
+              document.body.removeChild(spinContainer)
+            }
+            if (onComplete) onComplete()
+          },
+        })
+      }
+    } catch (error) {
+      console.error("Audio playback error:", error)
+      if (document.body.contains(spinContainer)) {
+        document.body.removeChild(spinContainer)
+      }
+      window.open(audioUrl, "_blank")
+    }
+
+    return {
+      stop: () => {
+        if (audioElement) {
+          audioElement.pause()
+        }
+        if (document.body.contains(spinContainer)) {
+          document.body.removeChild(spinContainer)
+        }
+      },
+    }
+  }
 }
 
 initSelectionBanner()
