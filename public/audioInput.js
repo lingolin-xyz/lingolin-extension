@@ -1,3 +1,4 @@
+const API_URL = "http://localhost:3000/api/v2"
 let isRecording = false
 let isAnimatingRecordingIndicator = false
 let mediaRecorder = null
