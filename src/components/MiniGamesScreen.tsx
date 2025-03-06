@@ -9,23 +9,25 @@ const MiniGamesScreen = ({
   onClose: () => void
   userSession: UserSession
 }) => {
+  console.log(userSession)
+
   const games = [
     {
-      title: "Vocabulary Quiz",
-      image: "https://javitoshi.com/images/red-lp.png",
+      title: "Fly To Save The Pepes",
+      image: "https://lingolin-web-dev.vercel.app/images/game2.png",
     },
     {
-      title: "Word Matching",
-      image: "/images/word-matching.jpg",
+      title: "LingoJump!",
+      image: "https://lingolin-web-dev.vercel.app/images/game1.png",
     },
     {
-      title: "Sentence Builder",
-      image: "/images/sentence-builder.jpg",
+      title: "LingoKart",
+      image: "https://lingolin-web-dev.vercel.app/images/game3.png",
     },
   ]
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-3 w-full">
       <Button
         variant="outline"
         size="sm"
@@ -36,28 +38,28 @@ const MiniGamesScreen = ({
         Back
       </Button>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
         {games.map((game, index) => (
           <div
             key={index}
-            className="overflow-hidden hover:shadow-lg transition-shadow rounded-xl cursor-pointer active:opacity-50"
+            className="overflow-hidden hover:scale-[102%] transition-all hover:shadow-lg rounded-md border border-transparent hover:border-black cursor-pointer active:opacity-50"
             style={{
               backgroundImage: `url(${game.image})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
           >
-            <div className="h-8" />
+            <div className="h-12" />
             <div className="px-4 py-0.5 pb-1 bg-gradient-to-b from-transparent to-black/50">
-              <div className="text-lg text-white text-shadow-like-border2 font-medium text-center w-full">
+              <div className="text-2xl text-white text-shadow-like-border2 font-bold text-balance w-full">
                 {game.title}
               </div>
             </div>
           </div>
         ))}
-        <div>
+        {/* <div>
           <pre>{JSON.stringify(userSession, null, 2)}</pre>
-        </div>
+        </div> */}
       </div>
     </div>
   )
