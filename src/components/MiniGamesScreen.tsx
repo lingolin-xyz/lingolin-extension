@@ -18,16 +18,16 @@ const MiniGamesScreen = ({
     },
     {
       title: "LingoJump!",
-      image: "https://lingolin-web-dev.vercel.app/images/game1.png",
+      image: "https://lingolin-web-dev.vercel.app/images/game3.png",
     },
     {
       title: "LingoKart",
-      image: "https://lingolin-web-dev.vercel.app/images/game3.png",
+      image: "https://lingolin-web-dev.vercel.app/images/game4.png",
     },
   ]
 
   return (
-    <div className="p-3 w-full">
+    <div className="p-2 w-full">
       <Button
         variant="outline"
         size="sm"
@@ -35,7 +35,7 @@ const MiniGamesScreen = ({
         onClick={onClose}
       >
         <ArrowLeft className="h-4 w-4" />
-        Back
+        <span className="translate-y-[1px]">Back</span>
       </Button>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
@@ -49,7 +49,7 @@ const MiniGamesScreen = ({
               backgroundPosition: "center",
             }}
           >
-            <div className="h-12" />
+            <div className="h-16" />
             <div className="px-4 py-0.5 pb-1 bg-gradient-to-b from-transparent to-black/50">
               <div className="text-2xl text-white text-shadow-like-border2 font-bold text-balance w-full">
                 {game.title}
