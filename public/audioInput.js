@@ -315,3 +315,94 @@ function springAnimation({
 
   animate()
 }
+
+// Nueva función reutilizable
+const playAudioWithSpinner = async ({ audioUrl, onComplete }) => {
+  // Create spinning image container
+  const spinContainer = document.createElement("div")
+  spinContainer.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 100px;
+    height: 100px;
+    z-index: 999999999;
+    transform: scale(0);
+  `
+
+  const spinImg = document.createElement("img")
+  spinImg.src = "https://javitoshi.com/images/yellow-lp.png"
+  spinImg.style.cssText = `
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+    animation: lingolinSpin 4s linear infinite;
+  `
+
+  spinContainer.appendChild(spinImg)
+  document.body.appendChild(spinContainer)
+
+  // Animate in
+  springAnimation({
+    from: 0,
+    to: 1,
+    stiffness: 0.2,
+    damping: 0.8,
+    onUpdate: (scale) => {
+      spinContainer.style.transform = `scale(${scale})`
+    },
+  })
+
+  // Create and play audio
+  let audioElement = null
+
+  try {
+    audioElement = new Audio(audioUrl)
+
+    // Add error handling for the audio element
+    audioElement.onerror = (e) => {
+      console.error("Audio error:", e)
+      if (document.body.contains(spinContainer)) {
+        document.body.removeChild(spinContainer)
+      }
+      window.open(audioUrl, "_blank")
+    }
+
+    audioElement.play()
+
+    // Reset when audio ends
+    audioElement.onended = () => {
+      easeOutAnimation({
+        from: 1,
+        to: 0,
+        duration: 500,
+        onUpdate: (scale) => {
+          spinContainer.style.transform = `scale(${scale})`
+        },
+        onComplete: () => {
+          if (document.body.contains(spinContainer)) {
+            document.body.removeChild(spinContainer)
+          }
+          if (onComplete) onComplete()
+        },
+      })
+    }
+  } catch (error) {
+    // console.error("Audio playback error:", error)
+    if (document.body.contains(spinContainer)) {
+      document.body.removeChild(spinContainer)
+    }
+    window.open(audioUrl, "_blank")
+  }
+
+  return {
+    stop: () => {
+      if (audioElement) {
+        audioElement.pause()
+      }
+      if (document.body.contains(spinContainer)) {
+        document.body.removeChild(spinContainer)
+      }
+    },
+  }
+}
