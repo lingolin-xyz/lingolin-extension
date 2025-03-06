@@ -51,7 +51,13 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
     }
   }
 
-  if (showMiniGamesScreen) return <MiniGamesScreen />
+  if (showMiniGamesScreen)
+    return (
+      <MiniGamesScreen
+        onClose={() => setShowMiniGamesScreen(false)}
+        userSession={userSession}
+      />
+    )
 
   return (
     <div className="flex flex-col items-center justify-center h-full p-4 gap-4">
