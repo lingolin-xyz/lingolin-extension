@@ -540,9 +540,7 @@ const FlyToSaveThePepes: React.FC<{
                 Collect points by touching the Pepes
               </CardDescription>
             </CardHeader>
-            <CardContent className="flex flex-col items-center">
-              <img src="/pepe-toucan.png" alt="Pepe Toucan" className="w-60" />
-            </CardContent>
+            <CardContent className="flex flex-col items-center"></CardContent>
             <CardFooter className="flex justify-center">
               <Button
                 onClick={handleNextStep}
@@ -562,9 +560,7 @@ const FlyToSaveThePepes: React.FC<{
                 Don't touch the trees!!
               </CardDescription>
             </CardHeader>
-            <CardContent className="flex flex-col items-center">
-              <img src="/pepe-tree.jpg" alt="Pepe Tree" className="w-60" />
-            </CardContent>
+            <CardContent className="flex flex-col items-center"></CardContent>
             <CardFooter className="flex justify-center">
               <Button
                 onClick={handleNextStep}
@@ -584,13 +580,7 @@ const FlyToSaveThePepes: React.FC<{
                 Do it as fast as you can!
               </CardDescription>
             </CardHeader>
-            <CardContent className="flex flex-col items-center">
-              <img
-                src="/toucan-forest-fly.png"
-                alt="Toucan Forest Fly"
-                className="w-60"
-              />
-            </CardContent>
+            <CardContent className="flex flex-col items-center"></CardContent>
             <CardFooter className="flex justify-center">
               <Button
                 onClick={handleNextStep}
