@@ -366,6 +366,8 @@ const FlyToSaveThePepes: React.FC<{
   const [gameStarted, setGameStarted] = useState(false)
   // Add audio ref for background music
   const bgMusicRef = useRef<HTMLAudioElement | null>(null)
+  // Add ref for wind sound effect
+  const windSoundRef = useRef<HTMLAudioElement | null>(null)
   // Add state for audio mute toggle
   const [isMuted, setIsMuted] = useState(false)
 
@@ -394,53 +396,97 @@ const FlyToSaveThePepes: React.FC<{
     fetchRecentTTS()
   }, [])
 
-  // Initialize and control background music
+  // Initialize and control background music and wind sounds
   useEffect(() => {
-    // Create audio element with external URL
-    const externalMusicUrl = "http://localhost:3000/audios/ToucanFly.mp3" // Reemplaza con tu URL real
+    // Create audio elements
+    const externalMusicUrl = "http://localhost:3000/audios/ToucanFly.mp3"
+    const windSoundUrl = "http://localhost:3000/audios/wind-noises.mp3" // Add this file to your public folder
+
     bgMusicRef.current = new Audio(externalMusicUrl)
     bgMusicRef.current.loop = true
-    bgMusicRef.current.volume = 0.22 // Set to 50% volume
+    bgMusicRef.current.volume = 0.22
 
-    // Play music when game starts
-    if (gameStarted && bgMusicRef.current) {
+    windSoundRef.current = new Audio(windSoundUrl)
+    windSoundRef.current.loop = true
+    windSoundRef.current.volume = 0.15 // Lower volume for ambient effect
+
+    // Play sounds when game starts
+    if (gameStarted) {
       bgMusicRef.current.play().catch((err) => {
         console.log("Audio playback failed:", err)
       })
+
+      windSoundRef.current.play().catch((err) => {
+        console.log("Wind sound playback failed:", err)
+      })
     }
 
-    // Cleanup function to stop music when component unmounts
+    // Cleanup function
     return () => {
       if (bgMusicRef.current) {
         bgMusicRef.current.pause()
         bgMusicRef.current.currentTime = 0
       }
+      if (windSoundRef.current) {
+        windSoundRef.current.pause()
+        windSoundRef.current.currentTime = 0
+      }
     }
   }, [gameStarted])
 
-  // Toggle mute function
+  // Toggle mute function - update to handle both sounds
   const toggleMute = useCallback(() => {
-    if (bgMusicRef.current) {
+    if (bgMusicRef.current && windSoundRef.current) {
       if (isMuted) {
         bgMusicRef.current.volume = 0.5
+        windSoundRef.current.volume = 0.15
       } else {
         bgMusicRef.current.volume = 0
+        windSoundRef.current.volume = 0
       }
       setIsMuted(!isMuted)
     }
   }, [isMuted])
 
-  // Stop music when game is over or won
+  // Adjust wind sound based on boost state
   useEffect(() => {
-    if ((gameOver || gameWon) && bgMusicRef.current) {
-      // Fade out music
+    if (windSoundRef.current && !isMuted) {
+      // Increase wind volume when boosting for more intense effect
+      const targetVolume = keys.boost ? 0.3 : 0.15
+
+      // Smoothly transition the volume
+      const adjustVolume = () => {
+        if (windSoundRef.current) {
+          const currentVol = windSoundRef.current.volume
+          const diff = targetVolume - currentVol
+
+          if (Math.abs(diff) > 0.01) {
+            windSoundRef.current.volume = currentVol + diff * 0.1
+            requestAnimationFrame(adjustVolume)
+          } else {
+            windSoundRef.current.volume = targetVolume
+          }
+        }
+      }
+
+      adjustVolume()
+    }
+  }, [keys.boost, isMuted])
+
+  // Stop sounds when game is over or won
+  useEffect(() => {
+    if ((gameOver || gameWon) && bgMusicRef.current && windSoundRef.current) {
+      // Fade out all audio
       const fadeOut = setInterval(() => {
         if (bgMusicRef.current && bgMusicRef.current.volume > 0.05) {
           bgMusicRef.current.volume -= 0.05
+        }
+
+        if (windSoundRef.current && windSoundRef.current.volume > 0.05) {
+          windSoundRef.current.volume -= 0.05
         } else {
-          if (bgMusicRef.current) {
-            bgMusicRef.current.pause()
-          }
+          if (bgMusicRef.current) bgMusicRef.current.pause()
+          if (windSoundRef.current) windSoundRef.current.pause()
           clearInterval(fadeOut)
         }
       }, 100)
