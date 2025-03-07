@@ -62,7 +62,7 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
     )
 
   return (
-    <div className="flex flex-col items-center justify-center h-full p-4 gap-4">
+    <div className="flex flex-col items-center justify-center h-full p-6 gap-4">
       <BlurryEntranceSuperFast delay={0.03}>
         <div className="flex flex-col w-[320px] justify-center gap-4 bg-zinc-100 p-3 rounded-xl">
           <div className="flex flex-col gap-1 flex-1">

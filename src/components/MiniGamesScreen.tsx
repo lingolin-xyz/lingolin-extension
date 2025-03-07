@@ -45,7 +45,7 @@ const MiniGamesScreen = ({
   }
 
   return (
-    <div className="p-2 w-full">
+    <div className="p-4 w-full">
       <BlurryEntranceFaster>
         <Button
           variant="outline"

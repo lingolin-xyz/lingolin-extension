@@ -19,6 +19,7 @@ import {
   CardDescription,
   CardFooter,
 } from "../ui/card"
+import toast from "react-hot-toast"
 
 // Tree component: cylinder trunk and sphere foliage
 const Tree: React.FC<{ position: [number, number, number] }> = ({
@@ -373,6 +374,7 @@ const FlyToSaveThePepes: React.FC<{
 
   const [specialSfx, setSpecialSfx] = useState<string[]>([])
 
+  const [sentences, setSentences] = useState<string[]>([])
   useEffect(() => {
     const fetchRecentTTS = async () => {
       // POST REQUEST, pass the userId as a parameter:
@@ -392,6 +394,9 @@ const FlyToSaveThePepes: React.FC<{
       const theAudios = data.map(({ extra5 }: { extra5: string }) => extra5)
       console.log(theAudios)
       setSpecialSfx(theAudios)
+      const theSentences = data.map(({ extra }: { extra: string }) => extra)
+      console.log(theSentences)
+      setSentences(theSentences)
     }
     fetchRecentTTS()
   }, [])
@@ -649,7 +654,7 @@ const FlyToSaveThePepes: React.FC<{
   // Render intro screen if game hasn't started
   if (!gameStarted) {
     return (
-      <div className="font-grandstander relative w-[360px] h-[440px] bg-gradient-to-b from-zinc-900 to-zinc-700 flex flex-col items-center justify-center p-5 text-center">
+      <div className="font-grandstander pt-2 relative w-[360px] h-[440px] bg-gradient-to-b from-zinc-900 to-zinc-700 flex flex-col items-center justify-center p-5 text-center">
         <Button
           variant="ghost"
           size="sm"
@@ -760,6 +765,7 @@ const FlyToSaveThePepes: React.FC<{
           setScore={setScore}
           setMessage={setMessage}
           specialSfx={specialSfx}
+          sentences={sentences}
         />
         <Bird keys={keys} />
         {treePositions.map((pos, i) => (
@@ -888,6 +894,7 @@ const CollisionDetector: React.FC<{
   setScore: React.Dispatch<React.SetStateAction<number>>
   setMessage: React.Dispatch<React.SetStateAction<string | null>>
   specialSfx: string[]
+  sentences: string[]
 }> = ({
   treePositions,
   housePositions,
@@ -896,6 +903,7 @@ const CollisionDetector: React.FC<{
   setScore,
   setMessage,
   specialSfx,
+  sentences,
 }) => {
   const { scene } = useThree()
   const [hasCollided, setHasCollided] = useState(false)
@@ -993,6 +1001,9 @@ const CollisionDetector: React.FC<{
             const randomSfx = specialSfx[randomIndex]
             const audio = new Audio(randomSfx)
             audio.play()
+
+            // show a toast with the sentence
+            toast.success(sentences[randomIndex])
 
             // Set a brief cooldown to prevent multiple collisions with different Pepes in the same frame
             setPepeCollisionCooldown(true)

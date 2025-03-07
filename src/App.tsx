@@ -5,6 +5,7 @@ import LoadingScreen from "./components/LoadingScreen"
 import LoggedInScreen from "./components/LoggedInScreen"
 import { UserSession } from "./lib/types"
 import { USE_PROD } from "./lib/constants"
+import { Toaster } from "react-hot-toast"
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -59,7 +60,8 @@ function App() {
   }, [])
 
   return (
-    <div className="w-[360px] h-[440px] mx-auto p-2 font-grandstander bg-white overflow-y-auto">
+    <div className="w-[360px] h-[440px] mx-auto p-0 font-grandstander bg-white overflow-y-auto">
+      <Toaster />
       {isLoading ? (
         <LoadingScreen />
       ) : (
