@@ -343,9 +343,9 @@ const Pepe: React.FC<{ position: [number, number, number] }> = ({
 }
 
 // Main game component
-const FlyingGame: React.FC<{
-  setShowGame?: React.Dispatch<React.SetStateAction<boolean>>
-}> = ({ setShowGame }) => {
+const FlyToSaveThePepes: React.FC<{
+  onClose?: () => void
+}> = ({ onClose }) => {
   const [keys, setKeys] = useState({
     left: false,
     right: false,
@@ -515,22 +515,15 @@ const FlyingGame: React.FC<{
     }
   }
 
-  // Handle back button
-  const handleBackToMenu = () => {
-    if (setShowGame) {
-      setShowGame(false)
-    }
-  }
-
   // Render intro screen if game hasn't started
   if (!gameStarted) {
     return (
-      <div className="font-grandstander relative w-[400px] h-[500px] bg-gradient-to-b from-emerald-100 to-emerald-300/90 flex flex-col items-center justify-center p-5 text-center">
+      <div className="font-grandstander relative w-[360px] h-[440px] bg-gradient-to-b from-zinc-900 to-zinc-700 flex flex-col items-center justify-center p-5 text-center">
         <Button
           variant="ghost"
           size="sm"
-          className="absolute top-2 left-2 text-white hover:bg-white/20"
-          onClick={handleBackToMenu}
+          className="absolute top-2 left-2 !text-black !bg-white hover:!bg-white/70"
+          onClick={onClose}
         >
           ← Back
         </Button>
@@ -617,7 +610,7 @@ const FlyingGame: React.FC<{
   }
 
   return (
-    <div style={{ position: "relative", width: "400px", height: "500px" }}>
+    <div style={{ position: "relative", width: "360px", height: "440px" }}>
       <Canvas
         style={{ background: "skyblue" }}
         shadows={{ type: THREE.PCFSoftShadowMap }}
@@ -690,30 +683,25 @@ const FlyingGame: React.FC<{
         <div>Time: {elapsedTime}s</div>
       </div>
 
-      {setShowGame && (
-        <Button
-          variant="ghost"
-          size="sm"
-          className="absolute top-4 right-4 bg-black/50 text-white hover:bg-black/70"
-          onClick={handleBackToMenu}
-        >
-          Exit
-        </Button>
-      )}
+      <Button
+        variant="ghost"
+        size="sm"
+        className="absolute top-4 right-4 bg-black/50 text-white hover:bg-black/70"
+        onClick={onClose}
+      >
+        Exit
+      </Button>
 
       {gameOver && (
         <div className="absolute inset-0 bg-black/50 text-white flex items-center justify-center text-2xl font-bold">
-          <Card className="bg-black/80 border-red-500 w-3/4 max-w-xs">
+          <Card className="bg-black/80 w-3/4 max-w-xs">
             <CardHeader>
               <CardTitle className="text-center text-red-500">
                 Game Over
               </CardTitle>
             </CardHeader>
             <CardFooter className="flex justify-center">
-              <Button
-                onClick={handleBackToMenu}
-                className="bg-red-500 hover:bg-red-600"
-              >
+              <Button onClick={onClose} className="bg-red-500 hover:bg-red-600">
                 Back to Menu
               </Button>
             </CardFooter>
@@ -734,7 +722,7 @@ const FlyingGame: React.FC<{
             </CardHeader>
             <CardFooter className="flex justify-center">
               <Button
-                onClick={handleBackToMenu}
+                onClick={onClose}
                 className="bg-green-500 hover:bg-green-600"
               >
                 Back to Menu
@@ -883,4 +871,4 @@ const CollisionDetector: React.FC<{
 // Preload the Pepe model to avoid loading delays during gameplay
 useGLTF.preload("/pepe_-_monkas.glb")
 
-export default FlyingGame
+export default FlyToSaveThePepes

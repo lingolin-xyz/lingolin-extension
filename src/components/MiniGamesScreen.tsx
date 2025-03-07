@@ -35,7 +35,7 @@ const MiniGamesScreen = ({
   const [preGame, setPreGame] = useState<number | null>(null)
 
   if (preGame) {
-    return <PreGame gameIndex={preGame} />
+    return <PreGame gameIndex={preGame} setGameIndex={setPreGame} />
   }
 
   return (
