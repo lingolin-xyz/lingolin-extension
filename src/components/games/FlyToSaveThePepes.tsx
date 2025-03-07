@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react"
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import {
   EffectComposer,
@@ -345,7 +345,8 @@ const Pepe: React.FC<{ position: [number, number, number] }> = ({
 // Main game component
 const FlyToSaveThePepes: React.FC<{
   onClose?: () => void
-}> = ({ onClose }) => {
+  userId: string
+}> = ({ onClose, userId }) => {
   const [keys, setKeys] = useState({
     left: false,
     right: false,
@@ -363,6 +364,90 @@ const FlyToSaveThePepes: React.FC<{
   // Add intro state
   const [introStep, setIntroStep] = useState(0) // 0 = step 1, 1 = step 2, 2 = step 3, 3 = game started
   const [gameStarted, setGameStarted] = useState(false)
+  // Add audio ref for background music
+  const bgMusicRef = useRef<HTMLAudioElement | null>(null)
+  // Add state for audio mute toggle
+  const [isMuted, setIsMuted] = useState(false)
+
+  const [specialSfx, setSpecialSfx] = useState<string[]>([])
+
+  useEffect(() => {
+    const fetchRecentTTS = async () => {
+      // POST REQUEST, pass the userId as a parameter:
+      const response = await fetch(
+        `http://localhost:3000/api/v2/get-recent-tts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId }),
+        }
+      )
+      const data = await response.json()
+      console.log("data FROM TTS!!!")
+      console.log(data)
+      const theAudios = data.map(({ extra5 }: { extra5: string }) => extra5)
+      console.log(theAudios)
+      setSpecialSfx(theAudios)
+    }
+    fetchRecentTTS()
+  }, [])
+
+  // Initialize and control background music
+  useEffect(() => {
+    // Create audio element with external URL
+    const externalMusicUrl = "http://localhost:3000/audios/ToucanFly.mp3" // Reemplaza con tu URL real
+    bgMusicRef.current = new Audio(externalMusicUrl)
+    bgMusicRef.current.loop = true
+    bgMusicRef.current.volume = 0.22 // Set to 50% volume
+
+    // Play music when game starts
+    if (gameStarted && bgMusicRef.current) {
+      bgMusicRef.current.play().catch((err) => {
+        console.log("Audio playback failed:", err)
+      })
+    }
+
+    // Cleanup function to stop music when component unmounts
+    return () => {
+      if (bgMusicRef.current) {
+        bgMusicRef.current.pause()
+        bgMusicRef.current.currentTime = 0
+      }
+    }
+  }, [gameStarted])
+
+  // Toggle mute function
+  const toggleMute = useCallback(() => {
+    if (bgMusicRef.current) {
+      if (isMuted) {
+        bgMusicRef.current.volume = 0.5
+      } else {
+        bgMusicRef.current.volume = 0
+      }
+      setIsMuted(!isMuted)
+    }
+  }, [isMuted])
+
+  // Stop music when game is over or won
+  useEffect(() => {
+    if ((gameOver || gameWon) && bgMusicRef.current) {
+      // Fade out music
+      const fadeOut = setInterval(() => {
+        if (bgMusicRef.current && bgMusicRef.current.volume > 0.05) {
+          bgMusicRef.current.volume -= 0.05
+        } else {
+          if (bgMusicRef.current) {
+            bgMusicRef.current.pause()
+          }
+          clearInterval(fadeOut)
+        }
+      }, 100)
+
+      return () => clearInterval(fadeOut)
+    }
+  }, [gameOver, gameWon])
 
   // Clear message after timeout
   useEffect(() => {
@@ -628,6 +713,7 @@ const FlyToSaveThePepes: React.FC<{
           score={score}
           setScore={setScore}
           setMessage={setMessage}
+          specialSfx={specialSfx}
         />
         <Bird keys={keys} />
         {treePositions.map((pos, i) => (
@@ -672,6 +758,16 @@ const FlyToSaveThePepes: React.FC<{
         <div>Score: {score}/25</div>
         <div>Time: {elapsedTime}s</div>
       </div>
+
+      {/* Mute button */}
+      <Button
+        variant="ghost"
+        size="sm"
+        className="absolute top-4 right-16 bg-black/50 text-white hover:bg-black/70"
+        onClick={toggleMute}
+      >
+        {isMuted ? "🔇" : "🔊"}
+      </Button>
 
       <Button
         variant="ghost"
@@ -745,6 +841,7 @@ const CollisionDetector: React.FC<{
   score: number
   setScore: React.Dispatch<React.SetStateAction<number>>
   setMessage: React.Dispatch<React.SetStateAction<string | null>>
+  specialSfx: string[]
 }> = ({
   treePositions,
   housePositions,
@@ -752,6 +849,7 @@ const CollisionDetector: React.FC<{
   setGameOver,
   setScore,
   setMessage,
+  specialSfx,
 }) => {
   const { scene } = useThree()
   const [hasCollided, setHasCollided] = useState(false)
@@ -843,6 +941,12 @@ const CollisionDetector: React.FC<{
 
             // Show a non-blocking message
             setMessage("Crashed into Pepe! +5 points")
+
+            // play one random special sfx
+            const randomIndex = Math.floor(Math.random() * specialSfx.length)
+            const randomSfx = specialSfx[randomIndex]
+            const audio = new Audio(randomSfx)
+            audio.play()
 
             // Set a brief cooldown to prevent multiple collisions with different Pepes in the same frame
             setPepeCollisionCooldown(true)
