@@ -21,6 +21,8 @@ import {
   CardFooter,
 } from "../ui/card"
 import toast from "react-hot-toast"
+import { AnimatePresence, motion } from "framer-motion"
+import BlurryEntranceFaster from "../BlurryEntranceFaster"
 
 // Tree component: cylinder trunk and sphere foliage
 const Tree: React.FC<{ position: [number, number, number] }> = ({
@@ -534,6 +536,9 @@ const FlyToSaveThePepes: React.FC<{
     if (score >= 25 && !gameWon) {
       setRevealConfetti(true)
       setGameWon(true)
+      // play a sound
+      const audio = new Audio("http://localhost:3000/audios/crowd-cheers.mp3")
+      audio.play()
       // setTimeout(() => {
       //   alert(`You won! Time: ${elapsedTime} seconds`)
       // }, 100)
@@ -768,7 +773,6 @@ const FlyToSaveThePepes: React.FC<{
           housePositions={housePositions}
           pepePositions={pepePositions}
           setGameOver={setGameOver}
-          score={score}
           setScore={setScore}
           setMessage={setMessage}
           specialSfx={specialSfx}
@@ -818,7 +822,7 @@ const FlyToSaveThePepes: React.FC<{
         <div>Time: {elapsedTime}s</div>
       </div>
 
-      <div className="absolute inset-0 z-[99999] pointer-events-none hello w-full h-full flex items-center justify-center">
+      <div className="absolute inset-0 z-[99999] pointer-events-none w-full h-full flex items-center justify-center">
         <Confetti active={revealConfetti} />
       </div>
 
@@ -826,7 +830,7 @@ const FlyToSaveThePepes: React.FC<{
       <Button
         variant="ghost"
         size="sm"
-        className="absolute top-4 right-16 bg-black/50 text-white hover:bg-black/70"
+        className="absolute top-4 right-16 !bg-black/50 !text-white hover:!bg-black/70"
         onClick={toggleMute}
       >
         {isMuted ? "🔇" : "🔊"}
@@ -835,7 +839,7 @@ const FlyToSaveThePepes: React.FC<{
       <Button
         variant="ghost"
         size="sm"
-        className="absolute top-4 right-4 bg-black/50 text-white hover:bg-black/70"
+        className="absolute top-4 right-4 !bg-black/50 !text-white hover:!bg-black/70"
         onClick={onClose}
       >
         Exit
@@ -850,7 +854,7 @@ const FlyToSaveThePepes: React.FC<{
               </CardTitle>
             </CardHeader>
             <CardFooter className="flex justify-center">
-              <Button onClick={onClose} className="bg-red-500 hover:bg-red-600">
+              <Button onClick={onClose} className="!bg-white !text-black">
                 Back to Menu
               </Button>
             </CardFooter>
@@ -862,35 +866,51 @@ const FlyToSaveThePepes: React.FC<{
         <div className="absolute inset-0 bg-black/70 text-white flex flex-col items-center justify-center">
           <Card className="bg-black/80 border-green-500 w-3/4 max-w-xs">
             <CardHeader>
-              <CardTitle className="text-center text-green-500">
-                You Made It!!!
-              </CardTitle>
-              <CardDescription className="text-center text-white text-lg mt-2">
-                Time: {elapsedTime} seconds
-              </CardDescription>
+              <BlurryEntranceFaster>
+                <CardTitle className="text-center text-green-500 text-3xl font-bold">
+                  You Made It!!!
+                </CardTitle>
+              </BlurryEntranceFaster>
+              <BlurryEntranceFaster delay={0.12}>
+                <CardDescription className="text-center text-white text-lg mt-2">
+                  Time: {elapsedTime} seconds
+                </CardDescription>
+              </BlurryEntranceFaster>
             </CardHeader>
+
             <CardFooter className="flex justify-center">
-              <Button
-                onClick={onClose}
-                className="bg-green-500 hover:bg-green-600"
-              >
-                Back to Menu
-              </Button>
+              <BlurryEntranceFaster delay={0.16}>
+                <Button onClick={onClose} className="!bg-white !text-black">
+                  Back to Menu
+                </Button>
+              </BlurryEntranceFaster>
             </CardFooter>
           </Card>
         </div>
       )}
 
-      <div className="absolute bottom-2 left-2 text-white bg-black/50 p-1.5 rounded text-sm">
-        Press SPACE to boost speed
-      </div>
-
-      {/* Message display */}
-      {message && (
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/70 text-white px-5 py-2.5 rounded text-lg z-10">
-          {message}
+      {!gameWon && (
+        <div className="absolute bottom-2 left-2 text-white bg-black/50 p-1.5 rounded text-sm">
+          <BlurryEntranceFaster delay={0.2}>
+            Press SPACE to boost speed
+          </BlurryEntranceFaster>
         </div>
       )}
+
+      <AnimatePresence>
+        {/* Message display */}
+        {message && (
+          <motion.div
+            initial={{ opacity: 0, y: 18, rotate: 12 }}
+            animate={{ opacity: 1, y: 0, rotate: 0 }}
+            exit={{ opacity: 0, y: -20, rotate: 50 }}
+            // transition={{ duration: 0.5 }}
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-yellow-300 text-shadow-like-border2 px-5 py-2.5 rounded text-2xl font-bold tracking-tighter z-10"
+          >
+            {message}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
@@ -901,7 +921,6 @@ const CollisionDetector: React.FC<{
   housePositions: [number, number, number][]
   pepePositions: [number, number, number][]
   setGameOver: React.Dispatch<React.SetStateAction<boolean>>
-  score: number
   setScore: React.Dispatch<React.SetStateAction<number>>
   setMessage: React.Dispatch<React.SetStateAction<string | null>>
   specialSfx: string[]
@@ -1005,7 +1024,7 @@ const CollisionDetector: React.FC<{
             setScore((prevScore) => prevScore + 5)
 
             // Show a non-blocking message
-            setMessage("Crashed into Pepe! +5 points")
+            setMessage("+5 points")
 
             // play one random special sfx
             const randomIndex = Math.floor(Math.random() * specialSfx.length)
