@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
+import Confetti from "react-dom-confetti"
 import {
   EffectComposer,
   Bloom,
@@ -348,6 +349,8 @@ const FlyToSaveThePepes: React.FC<{
   onClose?: () => void
   userId: string
 }> = ({ onClose, userId }) => {
+  const [revealConfetti, setRevealConfetti] = useState(false)
+
   const [keys, setKeys] = useState({
     left: false,
     right: false,
@@ -529,10 +532,11 @@ const FlyToSaveThePepes: React.FC<{
   // Handle scoring and win condition
   useEffect(() => {
     if (score >= 25 && !gameWon) {
+      setRevealConfetti(true)
       setGameWon(true)
-      setTimeout(() => {
-        alert(`You won! Time: ${elapsedTime} seconds`)
-      }, 100)
+      // setTimeout(() => {
+      //   alert(`You won! Time: ${elapsedTime} seconds`)
+      // }, 100)
     }
   }, [score, elapsedTime, gameWon])
 
@@ -679,10 +683,13 @@ const FlyToSaveThePepes: React.FC<{
             <CardContent className="flex flex-col items-center"></CardContent>
             <CardFooter className="flex justify-center">
               <Button
+                // onClick={() => {
+                //   setRevealConfetti(true)
+                // }}
                 onClick={handleNextStep}
                 className="!bg-emerald-500 hover:!bg-emerald-600 text-white"
               >
-                Next
+                Next CONF
               </Button>
             </CardFooter>
           </Card>
@@ -736,7 +743,7 @@ const FlyToSaveThePepes: React.FC<{
   }
 
   return (
-    <div style={{ position: "relative", width: "360px", height: "440px" }}>
+    <div style={{ position: "relative", width: "360px", height: "450px" }}>
       <Canvas
         style={{ background: "skyblue" }}
         shadows={{ type: THREE.PCFSoftShadowMap }}
@@ -811,6 +818,10 @@ const FlyToSaveThePepes: React.FC<{
         <div>Time: {elapsedTime}s</div>
       </div>
 
+      <div className="absolute inset-0 z-[99999] pointer-events-none hello w-full h-full flex items-center justify-center">
+        <Confetti active={revealConfetti} />
+      </div>
+
       {/* Mute button */}
       <Button
         variant="ghost"
@@ -852,7 +863,7 @@ const FlyToSaveThePepes: React.FC<{
           <Card className="bg-black/80 border-green-500 w-3/4 max-w-xs">
             <CardHeader>
               <CardTitle className="text-center text-green-500">
-                You Win!
+                You Made It!!!
               </CardTitle>
               <CardDescription className="text-center text-white text-lg mt-2">
                 Time: {elapsedTime} seconds

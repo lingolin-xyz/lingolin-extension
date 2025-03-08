@@ -17,7 +17,7 @@ import MiniGamesScreen from "./MiniGamesScreen"
 const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
   const [targetLanguage, setTargetLanguage] = useState("")
   const [nativeLanguage, setNativeLanguage] = useState("")
-  const [showMiniGamesScreen, setShowMiniGamesScreen] = useState(true)
+  const [showMiniGamesScreen, setShowMiniGamesScreen] = useState(false)
 
   useEffect(() => {
     if (chrome.storage) {
