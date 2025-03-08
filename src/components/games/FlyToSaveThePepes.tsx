@@ -510,7 +510,7 @@ const FlyToSaveThePepes: React.FC<{
     if (message) {
       const timer = setTimeout(() => {
         setMessage(null)
-      }, 1500)
+      }, 600)
       return () => clearTimeout(timer)
     }
   }, [message])
@@ -663,11 +663,11 @@ const FlyToSaveThePepes: React.FC<{
   // Render intro screen if game hasn't started
   if (!gameStarted) {
     return (
-      <div className="font-grandstander pt-2 relative w-[360px] h-[440px] bg-gradient-to-b from-zinc-900 to-zinc-700 flex flex-col items-center justify-center p-5 text-center">
+      <div className="font-grandstander relative w-[360px] h-[440px] bg-gradient-to-b from-zinc-900 to-zinc-700 flex flex-col items-center justify-center p-5 text-center">
         <Button
           variant="ghost"
           size="sm"
-          className="absolute top-2 left-2 !text-black !bg-white hover:!bg-white/70"
+          className="!absolute !top-4 !left-2 !text-black !bg-white hover:!bg-white/70"
           onClick={onClose}
         >
           ← Back
@@ -687,15 +687,17 @@ const FlyToSaveThePepes: React.FC<{
             </CardHeader>
             <CardContent className="flex flex-col items-center"></CardContent>
             <CardFooter className="flex justify-center">
-              <Button
-                // onClick={() => {
-                //   setRevealConfetti(true)
-                // }}
-                onClick={handleNextStep}
-                className="!bg-emerald-500 hover:!bg-emerald-600 text-white"
-              >
-                Next CONF
-              </Button>
+              <BlurryEntranceFaster delay={0.12}>
+                <Button
+                  // onClick={() => {
+                  //   setRevealConfetti(true)
+                  // }}
+                  onClick={handleNextStep}
+                  className="!bg-emerald-500 hover:!bg-emerald-600 text-white !text-xl !pb-1"
+                >
+                  Next
+                </Button>
+              </BlurryEntranceFaster>
             </CardFooter>
           </Card>
         )}
@@ -710,12 +712,14 @@ const FlyToSaveThePepes: React.FC<{
             </CardHeader>
             <CardContent className="flex flex-col items-center"></CardContent>
             <CardFooter className="flex justify-center">
-              <Button
-                onClick={handleNextStep}
-                className="!bg-emerald-500 hover:!bg-emerald-600 text-white"
-              >
-                Next
-              </Button>
+              <BlurryEntranceFaster delay={0.12}>
+                <Button
+                  onClick={handleNextStep}
+                  className="!bg-emerald-500 hover:!bg-emerald-600 text-white !text-xl !pb-1"
+                >
+                  Next
+                </Button>
+              </BlurryEntranceFaster>
             </CardFooter>
           </Card>
         )}
@@ -730,12 +734,14 @@ const FlyToSaveThePepes: React.FC<{
             </CardHeader>
             <CardContent className="flex flex-col items-center"></CardContent>
             <CardFooter className="flex justify-center">
-              <Button
-                onClick={handleNextStep}
-                className="!bg-orange-500 hover:!bg-orange-600 font-bold text-lg px-6 py-5 text-white"
-              >
-                Start the game!
-              </Button>
+              <BlurryEntranceFaster delay={0.12}>
+                <Button
+                  onClick={handleNextStep}
+                  className="!bg-orange-500 hover:!bg-orange-600 font-bold text-lg px-6 py-5 text-white"
+                >
+                  Start the game!
+                </Button>
+              </BlurryEntranceFaster>
             </CardFooter>
           </Card>
         )}
@@ -854,7 +860,7 @@ const FlyToSaveThePepes: React.FC<{
               </CardTitle>
             </CardHeader>
             <CardFooter className="flex justify-center">
-              <Button onClick={onClose} className="!bg-white !text-black">
+              <Button onClick={onClose} className="!bg-white !text-black !pb-1">
                 Back to Menu
               </Button>
             </CardFooter>
@@ -872,7 +878,7 @@ const FlyToSaveThePepes: React.FC<{
                 </CardTitle>
               </BlurryEntranceFaster>
               <BlurryEntranceFaster delay={0.12}>
-                <CardDescription className="text-center text-white text-lg mt-2">
+                <CardDescription className="text-center text-white text-lg mt-1">
                   Time: {elapsedTime} seconds
                 </CardDescription>
               </BlurryEntranceFaster>
@@ -880,7 +886,10 @@ const FlyToSaveThePepes: React.FC<{
 
             <CardFooter className="flex justify-center">
               <BlurryEntranceFaster delay={0.16}>
-                <Button onClick={onClose} className="!bg-white !text-black">
+                <Button
+                  onClick={onClose}
+                  className="!bg-white !text-black !pb-0"
+                >
                   Back to Menu
                 </Button>
               </BlurryEntranceFaster>
@@ -903,7 +912,12 @@ const FlyToSaveThePepes: React.FC<{
           <motion.div
             initial={{ opacity: 0, y: 18, rotate: 12 }}
             animate={{ opacity: 1, y: 0, rotate: 0 }}
-            exit={{ opacity: 0, y: -20, rotate: 50 }}
+            exit={{
+              opacity: 0,
+              y: -30,
+              rotate: 450,
+              transition: { duration: 0.08 },
+            }}
             // transition={{ duration: 0.5 }}
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-yellow-300 text-shadow-like-border2 px-5 py-2.5 rounded text-2xl font-bold tracking-tighter z-10"
           >

@@ -61,7 +61,19 @@ function App() {
 
   return (
     <div className="w-[360px] h-[440px] mx-auto p-0 font-grandstander bg-white overflow-y-auto">
-      <Toaster />
+      <div className="font-shantell-sans">
+        <Toaster
+          toastOptions={{
+            style: {
+              fontSize: "1.2rem",
+              fontWeight: "bold",
+              backgroundColor: "black",
+              color: "#ffff33",
+              border: "2px solid #ffff33",
+            },
+          }}
+        />
+      </div>
       {isLoading ? (
         <LoadingScreen />
       ) : (
