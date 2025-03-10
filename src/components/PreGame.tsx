@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import FlyToSaveThePepes from "./games/FlyToSaveThePepes"
 
 const PreGame = ({
@@ -13,7 +14,9 @@ const PreGame = ({
   return (
     <div className="w-full h-[calc(100vh-16px)] flex items-center justify-center">
       {gameIndex === 1 && (
-        <FlyToSaveThePepes onClose={() => setGameIndex(0)} userId={userId} />
+        <Suspense fallback={<div>Loading...</div>}>
+          <FlyToSaveThePepes onClose={() => setGameIndex(0)} userId={userId} />
+        </Suspense>
       )}
     </div>
   )

@@ -296,7 +296,7 @@ const SceneFog: React.FC<{ isBoosting: boolean }> = ({ isBoosting }) => {
 const Pepe: React.FC<{ position: [number, number, number] }> = ({
   position,
 }) => {
-  const { scene } = useGLTF("/pepe_-_monkas.glb")
+  const { scene } = useGLTF("/pepe_-_monkas/scene.gltf")
   const groupRef = useRef<THREE.Group>(null!)
 
   // Random rotation for variety
@@ -1069,6 +1069,6 @@ const CollisionDetector: React.FC<{
 }
 
 // Preload the Pepe model to avoid loading delays during gameplay
-useGLTF.preload("/pepe_-_monkas.glb")
+useGLTF.preload("/pepe_-_monkas/scene.gltf")
 
 export default FlyToSaveThePepes
