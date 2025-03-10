@@ -10,7 +10,6 @@ import {
 } from "@react-three/postprocessing"
 import { BlendFunction } from "postprocessing"
 import * as THREE from "three"
-import { useGLTF } from "@react-three/drei"
 import { Button } from "../ui/button"
 import {
   Card,
@@ -296,7 +295,6 @@ const SceneFog: React.FC<{ isBoosting: boolean }> = ({ isBoosting }) => {
 const Pepe: React.FC<{ position: [number, number, number] }> = ({
   position,
 }) => {
-  const { scene } = useGLTF("/pepe_-_monkas/scene.gltf")
   const groupRef = useRef<THREE.Group>(null!)
 
   // Random rotation for variety
@@ -304,35 +302,19 @@ const Pepe: React.FC<{ position: [number, number, number] }> = ({
     () => [0, Math.random() * Math.PI * 2, 0],
     []
   )
-  // Much larger scale (10x bigger) - base scale of 5-7.5
+  // Scale for the simple Pepe
   const scale = useMemo(() => 5 + Math.random() * 2.5, [])
 
-  useEffect(() => {
-    if (scene) {
-      // Clone the scene to avoid issues with reusing the same model
-      const clonedScene = scene.clone()
-
-      // Ensure original materials and colors are preserved
-      clonedScene.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
-          // Make sure materials are not modified
-          if (child.material) {
-            // Preserve original colors
-            const material = child.material as THREE.MeshStandardMaterial
-            if (material.map) {
-              // In newer Three.js, colorSpace is used instead of encoding
-              material.map.colorSpace = THREE.SRGBColorSpace
-            }
-            // Ensure materials use original colors
-            material.needsUpdate = true
-          }
-        }
-      })
-
-      // Add the cloned scene to our group
-      groupRef.current.add(clonedScene)
-    }
-  }, [scene])
+  // Color variations for Pepes
+  const pepeColor = useMemo(
+    () =>
+      new THREE.Color(
+        0.2 + Math.random() * 0.2,
+        0.7 + Math.random() * 0.3,
+        0.2
+      ),
+    []
+  )
 
   return (
     <group
@@ -342,7 +324,39 @@ const Pepe: React.FC<{ position: [number, number, number] }> = ({
       scale={scale}
       castShadow
       receiveShadow
-    />
+    >
+      {/* Pepe body */}
+      <mesh castShadow receiveShadow>
+        <sphereGeometry args={[1, 16, 16]} />
+        <meshStandardMaterial color={pepeColor} roughness={0.7} />
+      </mesh>
+
+      {/* Pepe eyes */}
+      <mesh position={[0.4, 0.4, 0.8]} castShadow>
+        <sphereGeometry args={[0.3, 12, 12]} />
+        <meshStandardMaterial color="white" />
+      </mesh>
+      <mesh position={[-0.4, 0.4, 0.8]} castShadow>
+        <sphereGeometry args={[0.3, 12, 12]} />
+        <meshStandardMaterial color="white" />
+      </mesh>
+
+      {/* Pepe pupils */}
+      <mesh position={[0.4, 0.4, 1.05]} castShadow>
+        <sphereGeometry args={[0.15, 8, 8]} />
+        <meshStandardMaterial color="black" />
+      </mesh>
+      <mesh position={[-0.4, 0.4, 1.05]} castShadow>
+        <sphereGeometry args={[0.15, 8, 8]} />
+        <meshStandardMaterial color="black" />
+      </mesh>
+
+      {/* Pepe mouth */}
+      <mesh position={[0, -0.1, 0.9]} rotation={[0.2, 0, 0]} castShadow>
+        <boxGeometry args={[0.8, 0.2, 0.2]} />
+        <meshStandardMaterial color="#cc3333" />
+      </mesh>
+    </group>
   )
 }
 
@@ -1067,8 +1081,5 @@ const CollisionDetector: React.FC<{
 
   return null
 }
-
-// Preload the Pepe model to avoid loading delays during gameplay
-useGLTF.preload("/pepe_-_monkas/scene.gltf")
 
 export default FlyToSaveThePepes
