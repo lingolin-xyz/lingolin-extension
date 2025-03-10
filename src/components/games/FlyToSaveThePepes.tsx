@@ -380,6 +380,18 @@ const FlyToSaveThePepes: React.FC<{
   const [specialSfx, setSpecialSfx] = useState<string[]>([])
 
   const [sentences, setSentences] = useState<string[]>([])
+
+  useEffect(() => {
+    if (score > 0) {
+      const index = Math.floor(score / 5) - 1 // * 1 is a trick here, hehe
+      const randomSfx = specialSfx[index]
+      const audio = new Audio(randomSfx)
+      audio.play()
+      // show a toast with the sentence
+      toast.success(sentences[index])
+    }
+  }, [score, specialSfx, sentences])
+
   useEffect(() => {
     const fetchRecentTTS = async () => {
       // POST REQUEST, pass the userId as a parameter:
@@ -781,8 +793,8 @@ const FlyToSaveThePepes: React.FC<{
           setGameOver={setGameOver}
           setScore={setScore}
           setMessage={setMessage}
-          specialSfx={specialSfx}
-          sentences={sentences}
+          // specialSfx={specialSfx}
+          // sentences={sentences}
         />
         <Bird keys={keys} />
         {treePositions.map((pos, i) => (
@@ -860,7 +872,10 @@ const FlyToSaveThePepes: React.FC<{
               </CardTitle>
             </CardHeader>
             <CardFooter className="flex justify-center">
-              <Button onClick={onClose} className="!bg-white !text-black !pb-1">
+              <Button
+                onClick={onClose}
+                className="!bg-white !text-black !font-xl !font-bold !pb-1"
+              >
                 Back to Menu
               </Button>
             </CardFooter>
@@ -888,7 +903,7 @@ const FlyToSaveThePepes: React.FC<{
               <BlurryEntranceFaster delay={0.16}>
                 <Button
                   onClick={onClose}
-                  className="!bg-white !text-black !pb-0"
+                  className="!bg-white !text-black !pb-1 !font-xl !font-bold"
                 >
                   Back to Menu
                 </Button>
@@ -937,8 +952,8 @@ const CollisionDetector: React.FC<{
   setGameOver: React.Dispatch<React.SetStateAction<boolean>>
   setScore: React.Dispatch<React.SetStateAction<number>>
   setMessage: React.Dispatch<React.SetStateAction<string | null>>
-  specialSfx: string[]
-  sentences: string[]
+  // specialSfx: string[]
+  // sentences: string[]
 }> = ({
   treePositions,
   housePositions,
@@ -946,8 +961,8 @@ const CollisionDetector: React.FC<{
   setGameOver,
   setScore,
   setMessage,
-  specialSfx,
-  sentences,
+  // specialSfx,
+  // sentences,
 }) => {
   const { scene } = useThree()
   const [hasCollided, setHasCollided] = useState(false)
@@ -1039,16 +1054,6 @@ const CollisionDetector: React.FC<{
 
             // Show a non-blocking message
             setMessage("+5 points")
-
-            // play one random special sfx
-            const randomIndex = Math.floor(Math.random() * specialSfx.length)
-            const randomSfx = specialSfx[randomIndex]
-            const audio = new Audio(randomSfx)
-            audio.play()
-
-            // show a toast with the sentence
-            toast.success(sentences[randomIndex])
-
             // Set a brief cooldown to prevent multiple collisions with different Pepes in the same frame
             setPepeCollisionCooldown(true)
             setTimeout(() => {
