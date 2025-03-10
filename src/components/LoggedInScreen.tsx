@@ -160,7 +160,7 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
       <BlurryEntranceSuperFast delay={0.22}>
         <div className="flex flex-wrap gap-6 justify-center items-center">
           <a
-            href="https://www.lingolin.xyz/"
+            href="https://app.lingolin.xyz/"
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-1"
@@ -180,7 +180,7 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
           </a>
 
           <a
-            href="https://www.lingolin.xyz/privacy-policy"
+            href="https://app.lingolin.xyz/privacy-policy"
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-1"

@@ -1,4 +1,5 @@
-const API_URL = "http://localhost:3000/api/v2"
+// const API_URL = "http://localhost:3000/api/v2"
+const API_URL = "https://app.lingolin.xyz/api/v2"
 let isRecording = false
 let isAnimatingRecordingIndicator = false
 let mediaRecorder = null

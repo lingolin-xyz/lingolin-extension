@@ -1,5 +1,3 @@
-const USE_PROD = false
-
 // Maximum text length for display
 const MAX_TEXT_LENGTH = 144
 
@@ -134,7 +132,7 @@ function initSelectionBanner() {
 
       if (!userData) {
         textContainer.innerHTML = `
-          <div style="color: yellow;">Please <a href="https://www.lingolin.xyz/" target="_blank" style="color: #10B981; text-decoration: underline;">login</a> to use the translation feature</div>
+          <div style="color: yellow;">Please <a href="https://app.lingolin.xyz/" target="_blank" style="color: #10B981; text-decoration: underline;">login</a> to use the translation feature</div>
         `
         translateButton.disabled = true
         return
@@ -195,9 +193,7 @@ function initSelectionBanner() {
 
           try {
             const response = await fetch(
-              USE_PROD
-                ? "https://www.lingolin.xyz/api/v1/translate"
-                : "http://localhost:3000/api/v1/translate",
+              "https://app.lingolin.xyz/api/v1/translate",
               {
                 method: "POST",
                 headers: {
@@ -249,11 +245,7 @@ function initSelectionBanner() {
                       "speakerRotate 2s linear infinite"
 
                     const response = await fetch(
-                      `${
-                        USE_PROD
-                          ? "https://www.lingolin.xyz"
-                          : "http://localhost:3000"
-                      }/api/v2/text-to-speech`,
+                      `${"https://app.lingolin.xyz"}/api/v2/text-to-speech`,
                       {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
@@ -472,7 +464,7 @@ Thank you and LFG!`
 
   // Add keyboard shortcut listener
   document.addEventListener("keydown", (event) => {
-    if (event.key.toLowerCase() === "t") {
+    if (event && event.key && event.key.toLowerCase() === "t") {
       const selectedText = window.getSelection()?.toString().trim()
       if (selectedText) {
         translateButton.click()
