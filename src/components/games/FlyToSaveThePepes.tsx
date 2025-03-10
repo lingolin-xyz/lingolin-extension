@@ -336,6 +336,23 @@ const Pepe: React.FC<{ position: [number, number, number] }> = ({
         <meshStandardMaterial color={pepeColor} roughness={0.7} />
       </mesh>
 
+      {/* Blue sweater (body) */}
+      <mesh position={[0, -0.5, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[0.9, 0.7, 1.2, 16]} />
+        <meshStandardMaterial color="#1e90ff" roughness={0.6} />
+      </mesh>
+
+      {/* Sweater collar */}
+      <mesh
+        position={[0, 0.1, 0.5]}
+        rotation={[0.3, 0, 0]}
+        castShadow
+        receiveShadow
+      >
+        <torusGeometry args={[0.6, 0.15, 8, 12, Math.PI * 0.6]} />
+        <meshStandardMaterial color="#0066cc" roughness={0.5} />
+      </mesh>
+
       {/* Pepe eyes */}
       <mesh position={[0.4, 0.4, 0.8]} castShadow>
         <sphereGeometry args={[0.3, 12, 12]} />
