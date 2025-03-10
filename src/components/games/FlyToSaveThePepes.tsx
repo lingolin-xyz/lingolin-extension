@@ -296,12 +296,8 @@ const Pepe: React.FC<{ position: [number, number, number] }> = ({
   position,
 }) => {
   const groupRef = useRef<THREE.Group>(null!)
+  const { camera } = useThree()
 
-  // Random rotation for variety
-  const rotation = useMemo<[number, number, number]>(
-    () => [0, Math.random() * Math.PI * 2, 0],
-    []
-  )
   // Scale for the simple Pepe
   const scale = useMemo(() => 5 + Math.random() * 2.5, [])
 
@@ -316,11 +312,20 @@ const Pepe: React.FC<{ position: [number, number, number] }> = ({
     []
   )
 
+  useFrame(() => {
+    if (groupRef.current) {
+      // Make the object look at the camera
+      groupRef.current.lookAt(camera.position)
+
+      // Apply a 180-degree rotation around the Y-axis
+      groupRef.current.rotateY(0)
+    }
+  })
+
   return (
     <group
       ref={groupRef}
       position={position}
-      rotation={rotation}
       scale={scale}
       castShadow
       receiveShadow
