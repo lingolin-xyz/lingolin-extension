@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react"
 import { useState } from "react"
 import PreGame from "./PreGame"
 import BlurryEntranceFaster from "./BlurryEntranceFaster"
+import toast from "react-hot-toast"
 
 const MiniGamesScreen = ({
   onClose,
@@ -34,7 +35,7 @@ const MiniGamesScreen = ({
 
   const [preGame, setPreGame] = useState<number | null>(null)
 
-  if (preGame) {
+  if (preGame === 1) {
     return (
       <PreGame
         gameIndex={preGame}
@@ -64,6 +65,9 @@ const MiniGamesScreen = ({
             <div
               onClick={() => {
                 setPreGame(game.id)
+                if (game.id !== 1) {
+                  toast("Coming soon!")
+                }
               }}
               className="overflow-hidden hover:scale-[102%] transition-all hover:shadow-lg rounded-md border border-transparent hover:border-black cursor-pointer active:opacity-50"
               style={{
