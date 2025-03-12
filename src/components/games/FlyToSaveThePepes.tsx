@@ -460,8 +460,6 @@ const FlyToSaveThePepes: React.FC<{
     // Create audio elements
     const externalMusicUrl = "https://app.lingolin.xyz/audios/ToucanFly.mp3"
     const windSoundUrl = "https://app.lingolin.xyz/audios/wind-noises.mp3" // Add this file to your public folder
-    // const externalMusicUrl = "http://localhost:3000/audios/ToucanFly.mp3"
-    // const windSoundUrl = "http://localhost:3000/audios/wind-noises.mp3" // Add this file to your public folder
 
     bgMusicRef.current = new Audio(externalMusicUrl)
     bgMusicRef.current.loop = true
@@ -591,7 +589,6 @@ const FlyToSaveThePepes: React.FC<{
       const audio = new Audio(
         "https://app.lingolin.xyz/audios/crowd-cheers.mp3"
       )
-      // const audio = new Audio("http://localhost:3000/audios/crowd-cheers.mp3")
       audio.play()
       // setTimeout(() => {
       //   alert(`You won! Time: ${elapsedTime} seconds`)
