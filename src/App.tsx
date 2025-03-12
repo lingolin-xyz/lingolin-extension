@@ -4,7 +4,7 @@ import NeedToSignIn from "./components/NeedToSignIn"
 import LoadingScreen from "./components/LoadingScreen"
 import LoggedInScreen from "./components/LoggedInScreen"
 import { UserSession } from "./lib/types"
-import { USE_PROD } from "./lib/constants"
+import { Toaster } from "react-hot-toast"
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -31,18 +31,19 @@ function App() {
         if (parsedResult && parsedResult.id) {
           // now ideally we should get: credit_balance and game_tier ... let's do that from the backend!!
 
-          await axios.post(
-            USE_PROD
-              ? "https://www.lingolin.xyz/api/v1/get-session"
-              : "http://localhost:3000/api/v1/get-session",
+          const res = await axios.post(
+            "https://app.lingolin.xyz/api/v1/get-session",
             {
               userId: parsedResult.id,
             }
           )
 
+          console.log("Came from get-session....")
+          console.log(res.data)
+
           setUserSession({
             ...parsedResult,
-            // credit_balance: res.data.credits,
+            credit_balance: res.data.credits,
           })
           setIsLoading(false)
         } else {
@@ -56,7 +57,20 @@ function App() {
   }, [])
 
   return (
-    <div className="w-[360px] h-[440px] mx-auto p-2 font-grandstander bg-white overflow-y-auto">
+    <div className="w-[360px] h-[440px] mx-auto p-0 font-grandstander bg-white overflow-y-auto">
+      <div className="font-shantell-sans">
+        <Toaster
+          toastOptions={{
+            style: {
+              fontSize: "1.2rem",
+              fontWeight: "bold",
+              backgroundColor: "black",
+              color: "#ffff33",
+              border: "2px solid #ffff33",
+            },
+          }}
+        />
+      </div>
       {isLoading ? (
         <LoadingScreen />
       ) : (

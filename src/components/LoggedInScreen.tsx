@@ -10,12 +10,14 @@ import {
 import BlurryEntranceSuperFast from "./BlurryEntranceSuperFast"
 import { AVALIABLE_LANGUANGES } from "@/lib/constants"
 import BlurryEntrance from "./BlurryEntrance"
+import { LayoutDashboard, Shield, MessageSquare } from "lucide-react"
 import { Button } from "./ui/button"
-import { LayoutDashboard, FileText, Shield, MessageSquare } from "lucide-react"
+import MiniGamesScreen from "./MiniGamesScreen"
 
 const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
   const [targetLanguage, setTargetLanguage] = useState("")
   const [nativeLanguage, setNativeLanguage] = useState("")
+  const [showMiniGamesScreen, setShowMiniGamesScreen] = useState(false)
 
   useEffect(() => {
     if (chrome.storage) {
@@ -49,8 +51,18 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
     }
   }
 
+  if (showMiniGamesScreen)
+    return (
+      <div>
+        <MiniGamesScreen
+          onClose={() => setShowMiniGamesScreen(false)}
+          userSession={userSession}
+        />
+      </div>
+    )
+
   return (
-    <div className="flex flex-col items-center justify-center h-full p-4 gap-4">
+    <div className="flex flex-col items-center justify-center h-full p-6 gap-4">
       <BlurryEntranceSuperFast delay={0.03}>
         <div className="flex flex-col w-[320px] justify-center gap-4 bg-zinc-100 p-3 rounded-xl">
           <div className="flex flex-col gap-1 flex-1">
@@ -105,7 +117,26 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
       </BlurryEntranceSuperFast>
 
       <BlurryEntranceSuperFast delay={0.15}>
-        <div className="flex items-center justify-center gap-3 h-24">
+        <div className="flex items-center justify-center gap-8 h-24">
+          <div className="translate-y-1">
+            <div className="flex flex-col items-center justify-center">
+              <div className="relative flex flex-col items-center justify-center pb-1.5">
+                <div className="text-5xl font-bold text-shadow-like-border2 text-yellow-300">
+                  {userSession.credit_balance}
+                </div>
+                <div className="text-sm font-bold absolute bottom-0">
+                  Credits
+                </div>
+              </div>
+            </div>
+            {/* <BlurryEntrance delay={0.28}>
+              {userSession && userSession.email && (
+                <div className="font-semibold text-xl">
+                  Hi, {userSession.email.split("@")[0]}!
+                </div>
+              )}
+            </BlurryEntrance> */}
+          </div>
           <BlurryEntrance delay={0.18}>
             <img
               src="https://javitoshi.com/images/lingolin.png"
@@ -113,72 +144,52 @@ const LoggedInScreen = ({ userSession }: { userSession: UserSession }) => {
               className="w-14 h-14"
             />
           </BlurryEntrance>
-          <div className="">
-            <BlurryEntrance delay={0.28}>
-              {userSession && userSession.email && (
-                <div className="font-semibold text-xl">
-                  Hi, {userSession.email.split("@")[0]}!
-                </div>
-              )}
-            </BlurryEntrance>
-          </div>
         </div>
       </BlurryEntranceSuperFast>
 
-      <BlurryEntranceSuperFast delay={0.22}>
-        <div className="flex flex-wrap gap-2.5 justify-center items-center">
-          <a href="https://www.lingolin.xyz/" target="_blank" rel="noreferrer">
-            <Button variant="outline2">
-              <LayoutDashboard className="w-4 h-4" />
-              Dashboard
+      <div className="w-full pb-6">
+        <BlurryEntrance delay={0.22}>
+          <div className="flex flex-col gap-2 w-full">
+            <Button onClick={() => setShowMiniGamesScreen(true)}>
+              Play Mini Games
             </Button>
+          </div>
+        </BlurryEntrance>
+      </div>
+
+      <BlurryEntranceSuperFast delay={0.22}>
+        <div className="flex flex-wrap gap-6 justify-center items-center">
+          <a
+            href="https://app.lingolin.xyz/"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-1"
+          >
+            <LayoutDashboard className="w-4 h-4" />
+            <div className="translate-y-[1px]">Dashboard</div>
           </a>
 
           <a
             href="https://x.com/hellolingolin"
             target="_blank"
             rel="noreferrer"
+            className="flex items-center gap-1"
           >
-            <Button variant="outline2">
-              <MessageSquare className="w-4 h-4" />
-              Feedback
-            </Button>
+            <MessageSquare className="w-4 h-4" />
+            <div className="translate-y-[1px]">Contact Us</div>
           </a>
 
           <a
-            href="https://www.lingolin.xyz/terms-and-conditions"
+            href="https://app.lingolin.xyz/privacy-policy"
             target="_blank"
             rel="noreferrer"
+            className="flex items-center gap-1"
           >
-            <Button variant="outline2">
-              <FileText className="w-4 h-4" />
-              Terms of Use
-            </Button>
-          </a>
-
-          <a
-            href="https://www.lingolin.xyz/privacy-policy"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <Button variant="outline2">
-              <Shield className="w-4 h-4" />
-              Privacy Policy
-            </Button>
+            <Shield className="w-4 h-4" />
+            <div className="translate-y-[1px]">Privacy Policy</div>
           </a>
         </div>
       </BlurryEntranceSuperFast>
-
-      {/* <BlurryEntranceSuperFast delay={0.22}>
-        <div className="flex flex-col items-center justify-center">
-          <div className="relative flex flex-col items-center justify-center pb-1.5">
-            <div className="text-5xl font-bold text-shadow-like-border2 text-yellow-300">
-              {userSession.credit_balance}
-            </div>
-            <div className="text-sm font-bold absolute bottom-0">Credits</div>
-          </div>
-        </div>
-      </BlurryEntranceSuperFast> */}
     </div>
   )
 }
