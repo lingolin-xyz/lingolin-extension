@@ -12,7 +12,7 @@ const NeedToSignIn = () => {
         <Button
           onClick={() => {
             chrome.tabs.create({
-              url: "https://app.lingolin.xyz",
+              url: "https://www.lingolin.xyz",
             })
           }}
         >

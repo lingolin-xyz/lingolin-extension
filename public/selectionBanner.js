@@ -132,7 +132,7 @@ function initSelectionBanner() {
 
       if (!userData) {
         textContainer.innerHTML = `
-          <div style="color: yellow;">Please <a href="https://app.lingolin.xyz/" target="_blank" style="color: #10B981; text-decoration: underline;">login</a> to use the translation feature</div>
+          <div style="color: yellow;">Please <a href="https://www.lingolin.xyz/" target="_blank" style="color: #10B981; text-decoration: underline;">login</a> to use the translation feature</div>
         `
         translateButton.disabled = true
         return
@@ -193,7 +193,7 @@ function initSelectionBanner() {
 
           try {
             const response = await fetch(
-              "https://app.lingolin.xyz/api/v1/translate",
+              "https://www.lingolin.xyz/api/v1/translate",
               {
                 method: "POST",
                 headers: {
@@ -245,7 +245,7 @@ function initSelectionBanner() {
                       "speakerRotate 2s linear infinite"
 
                     const response = await fetch(
-                      `${"https://app.lingolin.xyz"}/api/v2/text-to-speech`,
+                      `${"https://www.lingolin.xyz"}/api/v2/text-to-speech`,
                       {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },

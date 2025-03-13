@@ -432,8 +432,7 @@ const FlyToSaveThePepes: React.FC<{
     const fetchRecentTTS = async () => {
       // POST REQUEST, pass the userId as a parameter:
       const response = await fetch(
-        `https://app.lingolin.xyz/api/v2/get-recent-tts`,
-        // `http://localhost:3000/api/v2/get-recent-tts`,
+        `https://www.lingolin.xyz/api/v2/get-recent-tts`,
         {
           method: "POST",
           headers: {
@@ -458,8 +457,8 @@ const FlyToSaveThePepes: React.FC<{
   // Initialize and control background music and wind sounds
   useEffect(() => {
     // Create audio elements
-    const externalMusicUrl = "https://app.lingolin.xyz/audios/ToucanFly.mp3"
-    const windSoundUrl = "https://app.lingolin.xyz/audios/wind-noises.mp3" // Add this file to your public folder
+    const externalMusicUrl = "https://www.lingolin.xyz/audios/ToucanFly.mp3"
+    const windSoundUrl = "https://www.lingolin.xyz/audios/wind-noises.mp3" // Add this file to your public folder
 
     bgMusicRef.current = new Audio(externalMusicUrl)
     bgMusicRef.current.loop = true
@@ -587,7 +586,7 @@ const FlyToSaveThePepes: React.FC<{
       setGameWon(true)
       // play a sound
       const audio = new Audio(
-        "https://app.lingolin.xyz/audios/crowd-cheers.mp3"
+        "https://www.lingolin.xyz/audios/crowd-cheers.mp3"
       )
       audio.play()
       // setTimeout(() => {

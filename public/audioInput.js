@@ -1,5 +1,4 @@
-// const API_URL = "http://localhost:3000/api/v2"
-const API_URL = "https://app.lingolin.xyz/api/v2"
+const API_URL = "https://www.lingolin.xyz/api/v2"
 let isRecording = false
 let isAnimatingRecordingIndicator = false
 let mediaRecorder = null
@@ -23,7 +22,7 @@ document.addEventListener("keydown", async (event) => {
       await readSessionValues()
 
     if (!userData) {
-      alert("Please login to use this feature")
+      alert("Please login to use at lingolin.xyz this feature")
       return
     }
     if (!nativeLanguage || !targetLanguage) {

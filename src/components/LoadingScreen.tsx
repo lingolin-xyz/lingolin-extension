@@ -10,7 +10,7 @@ const LoadingScreen = () => {
       <BlurryEntrance delay={0.33}>
         <div className="animate-spin">
           <img
-            src="https://app.lingolin.xyz/images/lin-loading.png"
+            src="https://www.lingolin.xyz/images/lin-loading.png"
             alt="Lingolin Logo"
             className="w-10 h-10"
           />
