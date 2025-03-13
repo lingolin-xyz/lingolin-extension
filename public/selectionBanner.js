@@ -259,19 +259,56 @@ function initSelectionBanner() {
 
                     const audioData = await response.json()
 
-                    // Stop the rotation animation
-                    speakerImg.style.animation = ""
-                    speakerImg.src =
-                      "https://javitoshi.com/images/speaker-sticker-playing-2.png"
+                    if (audioData.error) {
+                      // Create error banner
+                      const errorPanel = document.createElement("div")
+                      errorPanel.style.cssText = `
+                        position: fixed;
+                        top: 20px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        border: 2px solid yellow;
+                        border-radius: 12px;
+                        width: 100%;
+                        max-width: 500px;
+                        background-color: black;
+                        color: yellow;
+                        padding: 10px;
+                        text-align: center;
+                        font-size: 24px;
+                        font-weight: bold;
+                        font-family: 'Grandstander', sans-serif;
+                        z-index: 999999999;
+                      `
+                      errorPanel.textContent = audioData.error
+                      document.body.appendChild(errorPanel)
 
-                    await playAudioWithSpinner({
-                      audioUrl: audioData.audio,
-                      onComplete: () => {
-                        speakerImg.style.animation = ""
-                        speakerImg.src =
-                          "https://javitoshi.com/images/speaker-sticker-2.png"
-                      },
-                    })
+                      // Click outside to dismiss
+                      document.addEventListener(
+                        "click",
+                        function hideError(event) {
+                          if (!errorPanel.contains(event.target)) {
+                            errorPanel.remove()
+                            document.removeEventListener("click", hideError)
+                          }
+                        }
+                      )
+                      return
+                    } else {
+                      // Stop the rotation animation
+                      speakerImg.style.animation = ""
+                      speakerImg.src =
+                        "https://javitoshi.com/images/speaker-sticker-playing-2.png"
+
+                      await playAudioWithSpinner({
+                        audioUrl: audioData.audio,
+                        onComplete: () => {
+                          speakerImg.style.animation = ""
+                          speakerImg.src =
+                            "https://javitoshi.com/images/speaker-sticker-2.png"
+                        },
+                      })
+                    }
                   } catch (error) {
                     const speakerImg = speakerButton.querySelector("img")
                     speakerImg.style.animation = ""
