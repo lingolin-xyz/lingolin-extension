@@ -57,12 +57,47 @@ document.addEventListener("keydown", async (event) => {
                 body: formData,
               })
 
+              console.log("response 🧧 🧧 🧧 🧧 🧧 🧧 🧧 🧧  ", response)
               const data = await response.json()
-              console.log("Audio procesado:", data)
 
-              // Create and show the results panel
-              const resultsPanel = document.createElement("div")
-              resultsPanel.style.cssText = `
+              if (data.error) {
+                // Create error banner
+                const errorPanel = document.createElement("div")
+                errorPanel.style.cssText = `
+                  position: fixed;
+                  top: 20px;
+                  left: 50%;
+                  transform: translateX(-50%);
+                  border: 2px solid yellow;
+                  border-radius: 12px;
+                  width: 100%;
+                  max-width: 500px;
+                  background-color: black;
+                  color: yellow;
+                  padding: 10px;
+                  text-align: center;
+                  font-size: 24px;
+                  font-weight: bold;
+                  font-family: 'Grandstander', sans-serif;
+                  z-index: 999999999;
+                `
+                errorPanel.textContent = data.error
+                document.body.appendChild(errorPanel)
+
+                // Click outside to dismiss
+                document.addEventListener("click", function hideError(event) {
+                  if (!errorPanel.contains(event.target)) {
+                    errorPanel.remove()
+                    document.removeEventListener("click", hideError)
+                  }
+                })
+                return
+              } else {
+                console.log("Audio procesado:", data)
+
+                // Create and show the results panel
+                const resultsPanel = document.createElement("div")
+                resultsPanel.style.cssText = `
                 position: fixed;
                 top: 20px;
                 left: 50%;
@@ -86,34 +121,40 @@ document.addEventListener("keydown", async (event) => {
                 gap: 10px;
               `
 
-              resultsPanel.innerHTML = `
+                resultsPanel.innerHTML = `
                 <div>${data.transcription}</div>
               `
 
-              const topBannerResultContainer = document.createElement("div")
+                const topBannerResultContainer = document.createElement("div")
 
-              document.body.appendChild(resultsPanel)
+                document.body.appendChild(resultsPanel)
 
-              putTextWithSpearkerButton({
-                theTranslation: data.translatedMessage,
-                panelToPlaceIt: topBannerResultContainer,
-              })
+                putTextWithSpearkerButton({
+                  theTranslation: data.translatedMessage,
+                  panelToPlaceIt: topBannerResultContainer,
+                })
 
-              resultsPanel.appendChild(topBannerResultContainer)
+                resultsPanel.appendChild(topBannerResultContainer)
 
-              // hide this panel if user clicks anywhere outside of it:
-              document.addEventListener("click", (event) => {
-                if (
-                  !resultsPanel.contains(event.target) &&
-                  !event.target.closest("#results-panel")
-                ) {
-                  resultsPanel.style.display = "none"
+                // hide this panel if user clicks anywhere outside of it:
+                document.addEventListener("click", (event) => {
+                  if (
+                    !resultsPanel.contains(event.target) &&
+                    !event.target.closest("#results-panel")
+                  ) {
+                    resultsPanel.style.display = "none"
+                  }
+                })
+
+                const audioURL = URL.createObjectURL(blob)
+                const audio = new Audio(audioURL)
+                audio.onerror = (e) => {
+                  console.error("Audio error:", e)
+                  window.open(audioURL, "_blank")
                 }
-              })
 
-              const audioURL = URL.createObjectURL(blob)
-              const audio = new Audio(audioURL)
-              audio.play()
+                audio.play()
+              }
             } catch (error) {
               console.error("Error enviando audio:", error)
             }
