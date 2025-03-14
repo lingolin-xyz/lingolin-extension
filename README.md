@@ -16,7 +16,7 @@ the web, with gamified elements and credit-based learning activities.
   [https://github.com/lingolin-xyz/lingolin-xyz](https://github.com/lingolin-xyz/lingolin-xyz)
 
 - Smart Contracts (hardhat + Solidity):
-  [https://github.com/lingolin-xyz/lingolin-extension](https://github.com/lingolin-xyz/lingolin-extension)
+  [https://github.com/lingolin-xyz/lingolin-contracts](https://github.com/lingolin-xyz/lingolin-contracts)
 
 # Lingolin Chrome Extension
 
